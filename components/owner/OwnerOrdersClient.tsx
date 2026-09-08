@@ -32,23 +32,42 @@ type Order = {
   pickup_otp?: string;
   created_at: string;
   notes?: string;
+  shop_id: string;
+  student?: { full_name: string; email: string };
+  shop?: { id: string; name: string };
+};
+
+interface OwnerOrdersClientProps {
+  orders: Order[];
+  shopId: string;
+  shopIds?: string[];
+  shops?: { id: string; name: string }[];
+}
+  payment_status: string;
+  pickup_otp?: string;
+  created_at: string;
+  notes?: string;
   student?: { full_name: string; email: string };
 };
 
 interface OwnerOrdersClientProps {
   orders: Order[];
   shopId: string;
+  shopIds?: string[];
+  shops?: { id: string; name: string }[];
 }
 
 type FilterTab = "all" | "pending" | "active" | "completed";
 
-export function OwnerOrdersClient({ orders: initialOrders, shopId }: OwnerOrdersClientProps) {
+export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shops }: OwnerOrdersClientProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<FilterTab>("pending");
+  const [filterShopId, setFilterShopId] = useState<string>("all");
   const [verifyOrderId, setVerifyOrderId] = useState<string | null>(null);
   const [otp, setOtp] = useState("");
   const [etaOrderId, setEtaOrderId] = useState<string | null>(null);
   const [eta, setEta] = useState("");
+  const hasMultipleShops = (shops?.length ?? 0) > 1;
 
   // Real-time subscription
   useEffect(() => {
@@ -75,6 +94,8 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId }: OwnerOrders
   }, [shopId]);
 
   const filteredOrders = orders.filter((o) => {
+    const shopMatch = filterShopId === "all" || o.shop_id === filterShopId;
+    if (!shopMatch) return false;
     if (filter === "pending") return o.status === "waiting_for_acceptance";
     if (filter === "active") return ["accepted", "preparing", "ready"].includes(o.status);
     if (filter === "completed") return ["picked_up", "rejected", "cancelled"].includes(o.status);
@@ -130,6 +151,27 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId }: OwnerOrders
         <h1 className="text-2xl font-bold text-white">Order Management</h1>
         <p className="text-zinc-400 text-sm mt-1">Accept, track and complete orders in real-time</p>
       </div>
+
+      {/* Shop filter — only show if multiple shops */}
+      {hasMultipleShops && (
+        <div className="flex gap-2 mb-2 overflow-x-auto pb-1">
+          <button
+            onClick={() => setFilterShopId("all")}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filterShopId === "all" ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-400"}`}
+          >
+            All Shops
+          </button>
+          {shops?.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => setFilterShopId(s.id)}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filterShopId === s.id ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-400"}`}
+            >
+              {s.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Filter tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
@@ -213,6 +255,11 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId }: OwnerOrders
                       <OrderStatusBadge status={order.status} />
                       {order.priority === "express" && (
                         <Badge variant="warning" className="text-[10px]">Express</Badge>
+                      )}
+                      {hasMultipleShops && order.shop && (
+                        <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full border border-zinc-700">
+                          {order.shop.name}
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-zinc-400">

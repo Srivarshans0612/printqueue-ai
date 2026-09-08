@@ -7,21 +7,31 @@ export default async function OwnerOrdersPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Get first shop regardless of status (approved or disabled)
+  // Get ALL shops for this owner
   const { data: shops } = await supabase
     .from("shops")
     .select("id, name")
     .eq("owner_id", user.id)
     .order("created_at", { ascending: true });
 
-  const shop = shops?.[0];
-  if (!shop) redirect("/owner");
+  if (!shops || shops.length === 0) redirect("/owner");
 
+  const shopIds = shops.map((s) => s.id);
+
+  // Fetch orders across ALL shops
   const { data: orders } = await supabase
     .from("orders")
-    .select("*, student:profiles(id, full_name, email), payment:payments(*)")
-    .eq("shop_id", shop.id)
+    .select("*, student:profiles(id, full_name, email), payment:payments(*), shop:shops(id, name)")
+    .in("shop_id", shopIds)
     .order("created_at", { ascending: false });
 
-  return <OwnerOrdersClient orders={orders ?? []} shopId={shop.id} />;
+  // Use first shop id for realtime (we'll handle multi-shop in client)
+  return (
+    <OwnerOrdersClient
+      orders={orders ?? []}
+      shopId={shopIds[0]}
+      shopIds={shopIds}
+      shops={shops}
+    />
+  );
 }
