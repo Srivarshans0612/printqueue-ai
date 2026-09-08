@@ -43,19 +43,6 @@ interface OwnerOrdersClientProps {
   shopIds?: string[];
   shops?: { id: string; name: string }[];
 }
-  payment_status: string;
-  pickup_otp?: string;
-  created_at: string;
-  notes?: string;
-  student?: { full_name: string; email: string };
-};
-
-interface OwnerOrdersClientProps {
-  orders: Order[];
-  shopId: string;
-  shopIds?: string[];
-  shops?: { id: string; name: string }[];
-}
 
 type FilterTab = "all" | "pending" | "active" | "completed";
 
