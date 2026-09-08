@@ -64,7 +64,7 @@ CREATE POLICY "locations_admin_all" ON public.locations
 CREATE POLICY "shops_select_approved" ON public.shops
   FOR SELECT USING (status = 'approved' OR public.is_admin());
 
--- Owners can read their own shop
+-- Owners can read their own shop (any status)
 CREATE POLICY "shops_select_own" ON public.shops
   FOR SELECT USING (owner_id = auth.uid());
 

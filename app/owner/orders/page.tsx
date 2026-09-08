@@ -7,11 +7,12 @@ export default async function OwnerOrdersPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Get ALL shops for this owner
+  // Get ALL shops for this owner (any status)
   const { data: shops } = await supabase
     .from("shops")
     .select("id, name")
     .eq("owner_id", user.id)
+    .in("status", ["approved", "disabled", "pending"])
     .order("created_at", { ascending: true });
 
   if (!shops || shops.length === 0) redirect("/owner");

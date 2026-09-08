@@ -17,11 +17,12 @@ export default async function OwnerDashboard() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Get ALL shops for this owner
+  // Get ALL shops for this owner (approved + disabled)
   const { data: allShops } = await supabase
     .from("shops")
     .select("*, location:locations(name)")
     .eq("owner_id", user.id)
+    .in("status", ["approved", "disabled", "pending"])
     .order("created_at", { ascending: true });
 
   const shops = allShops ?? [];
