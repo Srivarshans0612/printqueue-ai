@@ -7,12 +7,13 @@ export default async function OwnerAnalyticsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: shop } = await supabase
+  const { data: shops } = await supabase
     .from("shops")
     .select("id, name")
     .eq("owner_id", user.id)
-    .single();
+    .order("created_at", { ascending: true });
 
+  const shop = shops?.[0];
   if (!shop) redirect("/owner");
 
   const { data: orders } = await supabase

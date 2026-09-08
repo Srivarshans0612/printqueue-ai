@@ -23,12 +23,14 @@ export default async function OwnerDashboard() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Get owner's shop
-  const { data: shop } = await supabase
+  // Get owner's first shop (any status)
+  const { data: allShops } = await supabase
     .from("shops")
     .select("*, location:locations(name)")
     .eq("owner_id", user.id)
-    .single();
+    .order("created_at", { ascending: true });
+
+  const shop = allShops?.[0] ?? null;
 
   // Get shop request if no shop yet
   const { data: shopRequest } = !shop
