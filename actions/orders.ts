@@ -209,21 +209,24 @@ export async function updateOrderStatus(
 
   // If owner, verify the order belongs to their shop
   if (profile.role === "owner") {
-    const { data: shop } = await adminClient
-      .from("shops")
-      .select("id")
-      .eq("owner_id", user.id)
-      .single();
-
-    if (!shop) return { error: "Shop not found." };
-
+    // Get the order first to know which shop it belongs to
     const { data: order } = await adminClient
       .from("orders")
       .select("shop_id, student_id")
       .eq("id", orderId)
       .single();
 
-    if (!order || order.shop_id !== shop.id) return { error: "Unauthorized." };
+    if (!order) return { error: "Order not found." };
+
+    // Verify that shop belongs to this owner
+    const { data: shop } = await adminClient
+      .from("shops")
+      .select("id")
+      .eq("id", order.shop_id)
+      .eq("owner_id", user.id)
+      .maybeSingle();
+
+    if (!shop) return { error: "Unauthorized." };
 
     const update: Record<string, unknown> = { status };
     if (estimatedReadyAt) update.estimated_ready_at = estimatedReadyAt;
@@ -252,7 +255,7 @@ export async function updateOrderStatus(
 
     // Decrement queue on completion
     if (status === "ready" || status === "rejected" || status === "cancelled") {
-      await adminClient.rpc("decrement_queue", { shop_id: shop.id });
+      await adminClient.rpc("decrement_queue", { shop_id: order.shop_id });
     }
   } else {
     await adminClient.from("orders").update({ status }).eq("id", orderId);
