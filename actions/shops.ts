@@ -245,7 +245,44 @@ export async function disableShop(shopId: string) {
   if (profile?.role !== "admin") return { error: "Unauthorized." };
 
   const adminClient = await createAdminClient();
-  await adminClient.from("shops").update({ status: "disabled" }).eq("id", shopId);
+  await adminClient.from("shops").update({ status: "disabled", is_open: false }).eq("id", shopId);
+
+  revalidatePath("/admin/shops");
+  return { success: true };
+}
+
+export async function enableShop(shopId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated." };
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.role !== "admin") return { error: "Unauthorized." };
+
+  const adminClient = await createAdminClient();
+  await adminClient.from("shops").update({ status: "approved" }).eq("id", shopId);
+
+  // Notify shop owner
+  const { data: shop } = await adminClient
+    .from("shops")
+    .select("owner_id, name")
+    .eq("id", shopId)
+    .single();
+
+  if (shop) {
+    await adminClient.from("notifications").insert({
+      user_id: shop.owner_id,
+      title: "Shop Re-enabled ✓",
+      body: `Your shop "${shop.name}" has been re-enabled by admin. You can now open your shop and accept orders.`,
+      type: "shop_enabled",
+      is_read: false,
+    });
+  }
 
   revalidatePath("/admin/shops");
   return { success: true };

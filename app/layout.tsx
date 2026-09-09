@@ -21,22 +21,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-950 text-zinc-100 antialiased">
+      <body className="bg-slate-50 text-slate-900 antialiased">
         {children}
         <Toaster
           position="top-right"
           toastOptions={{
             style: {
-              background: "#18181b",
-              color: "#fafafa",
-              border: "1px solid #3f3f46",
+              background: "#ffffff",
+              color: "#0f172a",
+              border: "1px solid #e2e8f0",
               borderRadius: "10px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             },
             success: {
-              iconTheme: { primary: "#22c55e", secondary: "#18181b" },
+              iconTheme: { primary: "#16a34a", secondary: "#ffffff" },
             },
             error: {
-              iconTheme: { primary: "#ef4444", secondary: "#18181b" },
+              iconTheme: { primary: "#dc2626", secondary: "#ffffff" },
             },
           }}
         />

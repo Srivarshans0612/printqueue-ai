@@ -18,14 +18,14 @@ export function PublicNav() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800/60 bg-zinc-950/90 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-sm">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 group-hover:bg-blue-500 transition-colors">
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 group-hover:bg-blue-700 transition-colors">
             <Printer className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-white text-lg tracking-tight">
-            PrintQueue <span className="text-lime-400">AI</span>
+          <span className="font-bold text-slate-900 text-lg tracking-tight">
+            PrintQueue <span className="text-blue-600">AI</span>
           </span>
         </Link>
 
@@ -36,8 +36,8 @@ export function PublicNav() {
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-white",
-                pathname === link.href ? "text-white" : "text-zinc-400"
+                "text-sm font-medium transition-colors hover:text-blue-600",
+                pathname === link.href ? "text-blue-600" : "text-slate-600"
               )}
             >
               {link.label}
@@ -54,9 +54,8 @@ export function PublicNav() {
           </Button>
         </div>
 
-        {/* Mobile menu button */}
         <button
-          className="md:hidden text-zinc-400 hover:text-white"
+          className="md:hidden text-slate-600 hover:text-slate-900"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
@@ -64,14 +63,13 @@ export function PublicNav() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-zinc-800 bg-zinc-950 px-4 py-4 space-y-3">
+        <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-3">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block text-sm text-zinc-400 hover:text-white py-1"
+              className="block text-sm text-slate-600 hover:text-blue-600 py-1"
               onClick={() => setMenuOpen(false)}
             >
               {link.label}

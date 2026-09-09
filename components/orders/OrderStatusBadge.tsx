@@ -1,10 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 
-const STATUS_CONFIG: Record<string, { variant: "success" | "blue" | "warning" | "destructive" | "secondary" | "outline"; label: string }> = {
+const STATUS_CONFIG: Record<string, {
+  variant: "success" | "blue" | "warning" | "destructive" | "secondary" | "outline";
+  label: string;
+}> = {
   waiting_for_acceptance: { variant: "warning", label: "Waiting" },
   accepted: { variant: "blue", label: "Accepted" },
-  preparing: { variant: "blue", label: "Preparing" },
-  ready: { variant: "success", label: "Ready!" },
+  preparing: { variant: "blue", label: "Printing" },
+  ready: { variant: "success", label: "Ready! 🎉" },
   picked_up: { variant: "secondary", label: "Picked Up" },
   rejected: { variant: "destructive", label: "Rejected" },
   cancelled: { variant: "outline", label: "Cancelled" },

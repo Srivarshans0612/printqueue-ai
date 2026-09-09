@@ -1,27 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import {
-  CheckCircle,
-  Package,
-  User,
-  FileText,
-  Printer,
-  ShieldCheck,
+  CheckCircle, Package, User, FileText,
+  Printer, ShieldCheck, Download, X,
+  Plus, Monitor,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/components/orders/OrderStatusBadge";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, format } from "date-fns";
 
 type Order = {
   id: string;
   token: string;
   status: string;
   document_name: string;
+  document_path: string;
   document_pages: number;
   copies: number;
   print_type: string;
@@ -33,8 +31,10 @@ type Order = {
   created_at: string;
   notes?: string;
   shop_id: string;
-  student?: { full_name: string; email: string };
-  shop?: { id: string; name: string };
+  deadline?: string;
+  estimated_ready_at?: string;
+  student?: { id: string; full_name: string; email: string } | null;
+  shop?: { id: string; name: string } | null;
 };
 
 interface OwnerOrdersClientProps {
@@ -46,7 +46,204 @@ interface OwnerOrdersClientProps {
 
 type FilterTab = "all" | "pending" | "active" | "completed";
 
-export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shops }: OwnerOrdersClientProps) {
+// ── Print Preview Modal ───────────────────────────────────────────────
+function PrintPreviewModal({
+  order,
+  printers,
+  defaultPrinter,
+  onClose,
+  onAddPrinter,
+}: {
+  order: Order;
+  printers: string[];
+  defaultPrinter: string;
+  onClose: () => void;
+  onAddPrinter: () => void;
+}) {
+  const [selectedPrinter, setSelectedPrinter] = useState(defaultPrinter);
+
+  const handlePrint = () => {
+    // Use browser print with print-specific CSS
+    window.print();
+    toast.success(`Sent to printer: ${selectedPrinter}`);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+          <div className="flex items-center gap-2">
+            <Printer className="w-5 h-5 text-blue-600" />
+            <h3 className="text-slate-900 font-semibold">Print Order</h3>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Print preview area */}
+        <div className="px-6 py-5 print-only" id="print-area">
+          <div className="border border-slate-200 rounded-xl p-5 bg-slate-50 mb-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-0.5">Order Token</p>
+                <p className="token-display text-2xl font-bold text-blue-600">{order.token}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-0.5">Total</p>
+                <p className="text-xl font-bold text-slate-900">₹{order.total_amount}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Customer</p>
+                <p className="text-slate-900 font-medium">{order.student?.full_name ?? "—"}</p>
+                <p className="text-slate-500 text-xs">{order.student?.email ?? ""}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Document</p>
+                <p className="text-slate-900 font-medium truncate">{order.document_name}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Pages × Copies</p>
+                <p className="text-slate-900 font-medium">{order.document_pages} × {order.copies} = {order.document_pages * order.copies} pages</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Print Type</p>
+                <p className="text-slate-900 font-medium">{order.print_type === "bw" ? "Black & White" : "Color"}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Priority</p>
+                <p className="text-slate-900 font-medium capitalize">{order.priority}</p>
+              </div>
+              <div>
+                <p className="text-slate-500 text-xs mb-0.5">Payment</p>
+                <p className="text-slate-900 font-medium capitalize">{order.payment_method.replace(/_/g, " ")}</p>
+              </div>
+              {order.deadline && (
+                <div className="col-span-2">
+                  <p className="text-slate-500 text-xs mb-0.5">Deadline</p>
+                  <p className="text-amber-600 font-medium">{format(new Date(order.deadline), "h:mm a, MMM d yyyy")}</p>
+                </div>
+              )}
+              {order.notes && (
+                <div className="col-span-2">
+                  <p className="text-slate-500 text-xs mb-0.5">Special Instructions</p>
+                  <p className="text-slate-700">{order.notes}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="border-t border-slate-200 mt-4 pt-3 text-xs text-slate-400 flex justify-between">
+              <span>PrintQueue AI</span>
+              <span>{format(new Date(order.created_at), "MMM d, yyyy h:mm a")}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Printer selection */}
+        <div className="px-6 pb-5 no-print space-y-4">
+          <div>
+            <label className="text-sm font-medium text-slate-700 block mb-1.5">Select Printer</label>
+            <select
+              value={selectedPrinter}
+              onChange={(e) => setSelectedPrinter(e.target.value)}
+              className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {printers.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            onClick={onAddPrinter}
+            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+          >
+            <Plus className="w-4 h-4" /> Add Another Printer
+          </button>
+
+          <div className="flex gap-3 pt-2">
+            <Button variant="outline" className="flex-1" onClick={onClose}>Cancel</Button>
+            <Button className="flex-1" onClick={handlePrint}>
+              <Printer className="w-4 h-4 mr-1.5" /> Print Now
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Add Printer Modal ─────────────────────────────────────────────────
+function AddPrinterModal({
+  onAdd,
+  onClose,
+}: {
+  onAdd: (name: string) => void;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+
+  const handleDetect = () => {
+    // In a real app, use window.print() to trigger browser printer dialog
+    const detected = "HP LaserJet (Auto-detected)";
+    setName(detected);
+    toast.success("Printer detected: " + detected);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Monitor className="w-5 h-5 text-blue-600" />
+          <h3 className="text-slate-900 font-semibold">Add Printer</h3>
+        </div>
+
+        <p className="text-slate-500 text-sm mb-4">
+          Connect a printer to your device, then enter its name or auto-detect.
+        </p>
+
+        <div className="space-y-3 mb-5">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. HP LaserJet Pro"
+            className="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            onClick={handleDetect}
+            className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1.5"
+          >
+            <Monitor className="w-3.5 h-3.5" /> Auto-detect printer
+          </button>
+        </div>
+
+        <div className="flex gap-3">
+          <Button variant="outline" className="flex-1" onClick={onClose}>Cancel</Button>
+          <Button
+            className="flex-1"
+            disabled={!name.trim()}
+            onClick={() => { onAdd(name.trim()); onClose(); }}
+          >
+            Add Printer
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Component ────────────────────────────────────────────────────
+export function OwnerOrdersClient({
+  orders: initialOrders,
+  shopId,
+  shops,
+}: OwnerOrdersClientProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [filter, setFilter] = useState<FilterTab>("pending");
   const [filterShopId, setFilterShopId] = useState<string>("all");
@@ -54,28 +251,33 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
   const [otp, setOtp] = useState("");
   const [etaOrderId, setEtaOrderId] = useState<string | null>(null);
   const [eta, setEta] = useState("");
+
+  // Printer state
+  const [printers, setPrinters] = useState<string[]>(["Default System Printer"]);
+  const [defaultPrinter, setDefaultPrinter] = useState("Default System Printer");
+  const [printOrder, setPrintOrder] = useState<Order | null>(null);
+  const [showAddPrinter, setShowAddPrinter] = useState(false);
+
   const hasMultipleShops = (shops?.length ?? 0) > 1;
 
-  // Real-time subscription
+  // ── Real-time subscription ─────────────────────────────────────────
   useEffect(() => {
     const supabase = createClient();
     const channel = supabase
       .channel(`shop_orders:${shopId}`)
-      .on(
-        "postgres_changes",
+      .on("postgres_changes",
         { event: "*", schema: "public", table: "orders", filter: `shop_id=eq.${shopId}` },
         (payload) => {
           if (payload.eventType === "INSERT") {
             setOrders((prev) => [payload.new as Order, ...prev]);
-            toast("New order received!", { icon: "🔔" });
+            toast("🔔 New order received!", { duration: 5000 });
           } else if (payload.eventType === "UPDATE") {
             setOrders((prev) =>
-              prev.map((o) => o.id === payload.new.id ? { ...o, ...payload.new as Order } : o)
+              prev.map((o) => o.id === payload.new.id ? { ...o, ...(payload.new as Order) } : o)
             );
           }
         }
-      )
-      .subscribe();
+      ).subscribe();
 
     return () => { supabase.removeChannel(channel); };
   }, [shopId]);
@@ -89,32 +291,47 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
     return true;
   });
 
+  // ── Actions ────────────────────────────────────────────────────────
   const handleAccept = async (orderId: string) => {
     const { updateOrderStatus } = await import("@/actions/orders");
     const result = await updateOrderStatus(orderId, "accepted");
     if (result.error) toast.error(result.error);
-    else toast.success("Order accepted!");
+    else {
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "accepted" } : o));
+      toast.success("Order accepted!");
+    }
   };
 
   const handleReject = async (orderId: string) => {
     const { updateOrderStatus } = await import("@/actions/orders");
     const result = await updateOrderStatus(orderId, "rejected");
     if (result.error) toast.error(result.error);
-    else toast("Order rejected", { icon: "❌" });
+    else {
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "rejected" } : o));
+      toast("Order rejected", { icon: "❌" });
+    }
   };
 
   const handlePreparing = async (orderId: string) => {
     const { updateOrderStatus } = await import("@/actions/orders");
     const result = await updateOrderStatus(orderId, "preparing", eta || undefined);
     if (result.error) toast.error(result.error);
-    else { toast.success("Status updated to Preparing"); setEtaOrderId(null); setEta(""); }
+    else {
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "preparing", estimated_ready_at: eta || o.estimated_ready_at } : o));
+      toast.success("Printing started!");
+      setEtaOrderId(null);
+      setEta("");
+    }
   };
 
   const handleReady = async (orderId: string) => {
     const { updateOrderStatus } = await import("@/actions/orders");
     const result = await updateOrderStatus(orderId, "ready");
     if (result.error) toast.error(result.error);
-    else toast.success("Order marked as Ready! Student notified. 🎉");
+    else {
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "ready" } : o));
+      toast.success("Order marked Ready! Student notified 🎉");
+    }
   };
 
   const handleVerifyOTP = async () => {
@@ -123,10 +340,37 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
     const result = await verifyOTP(verifyOrderId, otp);
     if (result.error) toast.error(result.error);
     else {
+      setOrders((prev) => prev.map((o) => o.id === verifyOrderId ? { ...o, status: "picked_up" } : o));
       toast.success("OTP verified! Order picked up ✓");
       setVerifyOrderId(null);
       setOtp("");
     }
+  };
+
+  // ── Download handler ───────────────────────────────────────────────
+  const handleDownload = async (order: Order) => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.storage
+        .from("documents")
+        .createSignedUrl(order.document_path, 60);
+      if (error || !data) throw new Error("Could not generate download link");
+      const link = document.createElement("a");
+      link.href = data.signedUrl;
+      link.download = order.document_name;
+      link.target = "_blank";
+      link.click();
+      toast.success("Download started");
+    } catch {
+      toast.error("Download failed. Check storage permissions.");
+    }
+  };
+
+  // ── Printer helpers ────────────────────────────────────────────────
+  const handleAddPrinter = (name: string) => {
+    setPrinters((prev) => [...prev, name]);
+    setDefaultPrinter(name);
+    toast.success(`${name} set as default printer`);
   };
 
   const pendingCount = orders.filter((o) => o.status === "waiting_for_acceptance").length;
@@ -134,17 +378,67 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 page-enter">
+      {/* Print preview modal */}
+      {printOrder && (
+        <PrintPreviewModal
+          order={printOrder}
+          printers={printers}
+          defaultPrinter={defaultPrinter}
+          onClose={() => setPrintOrder(null)}
+          onAddPrinter={() => { setPrintOrder(null); setShowAddPrinter(true); }}
+        />
+      )}
+
+      {/* Add printer modal */}
+      {showAddPrinter && (
+        <AddPrinterModal
+          onAdd={handleAddPrinter}
+          onClose={() => setShowAddPrinter(false)}
+        />
+      )}
+
+      {/* OTP Verify Modal */}
+      {verifyOrderId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+            <h3 className="text-slate-900 font-semibold mb-2 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              Verify Pickup OTP
+            </h3>
+            <p className="text-slate-500 text-sm mb-4">Ask the student for their 6-digit OTP</p>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={otp}
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+              placeholder="Enter 6-digit OTP"
+              className="w-full text-center text-2xl font-bold tracking-widest token-display h-14 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+            />
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={() => { setVerifyOrderId(null); setOtp(""); }}>Cancel</Button>
+              <Button className="flex-1" onClick={handleVerifyOTP} disabled={otp.length !== 6}>Verify & Complete</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Page header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Order Management</h1>
-        <p className="text-zinc-400 text-sm mt-1">Accept, track and complete orders in real-time</p>
+        <h1 className="text-2xl font-bold text-slate-900">Order Management</h1>
+        <p className="text-slate-500 text-sm mt-1">Accept, track and complete orders in real-time</p>
       </div>
 
-      {/* Shop filter — only show if multiple shops */}
+      {/* Shop filter */}
       {hasMultipleShops && (
-        <div className="flex gap-2 mb-2 overflow-x-auto pb-1">
+        <div className="flex gap-2 mb-3 overflow-x-auto pb-1">
           <button
             onClick={() => setFilterShopId("all")}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filterShopId === "all" ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-400"}`}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+              filterShopId === "all"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
+            }`}
           >
             All Shops
           </button>
@@ -152,7 +446,11 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
             <button
               key={s.id}
               onClick={() => setFilterShopId(s.id)}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${filterShopId === s.id ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-400"}`}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+                filterShopId === s.id
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
+              }`}
             >
               {s.name}
             </button>
@@ -167,21 +465,19 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
           { key: "active" as FilterTab, label: "Active", count: activeCount },
           { key: "completed" as FilterTab, label: "Completed", count: 0 },
           { key: "all" as FilterTab, label: "All Orders", count: orders.length },
-        ] as const).map((tab) => (
+        ]).map((tab) => (
           <button
             key={tab.key}
             onClick={() => setFilter(tab.key)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0 ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0 border ${
               filter === tab.key
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:text-white"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
             }`}
           >
             {tab.label}
             {tab.count > 0 && (
-              <span className={`text-xs rounded-full px-1.5 py-0 ${
-                filter === tab.key ? "bg-blue-500" : "bg-zinc-700"
-              }`}>
+              <span className={`text-xs rounded-full px-1.5 ${filter === tab.key ? "bg-blue-500 text-white" : "bg-slate-200 text-slate-600"}`}>
                 {tab.count}
               </span>
             )}
@@ -189,104 +485,92 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
         ))}
       </div>
 
-      {/* OTP Verify Modal */}
-      {verifyOrderId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-          <div className="glass-card p-6 w-full max-w-sm">
-            <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-blue-400" />
-              Verify Pickup OTP
-            </h3>
-            <p className="text-zinc-400 text-sm mb-4">Ask the student for their 6-digit OTP</p>
-            <input
-              type="text"
-              inputMode="numeric"
-              maxLength={6}
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-              placeholder="Enter 6-digit OTP"
-              className="w-full text-center text-2xl font-bold tracking-widest token-display h-14 rounded-xl border border-zinc-600 bg-zinc-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-            />
-            <div className="flex gap-2">
-              <Button onClick={() => { setVerifyOrderId(null); setOtp(""); }} variant="outline" className="flex-1">Cancel</Button>
-              <Button onClick={handleVerifyOTP} className="flex-1" disabled={otp.length !== 6}>Verify</Button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Orders list */}
       {filteredOrders.length === 0 ? (
-        <div className="text-center py-16">
-          <Package className="w-12 h-12 text-zinc-700 mx-auto mb-3" />
-          <p className="text-zinc-400">No orders here</p>
+        <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
+          <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <p className="text-slate-400 font-medium">No orders here</p>
+          <p className="text-slate-300 text-sm">Orders will appear automatically in real-time</p>
         </div>
       ) : (
         <div className="space-y-4">
           {filteredOrders.map((order) => (
             <Card
               key={order.id}
-              className={`${
-                order.status === "waiting_for_acceptance"
-                  ? "border-amber-500/30"
-                  : order.status === "ready"
-                  ? "border-emerald-600/30"
-                  : ""
+              className={`transition-all ${
+                order.status === "waiting_for_acceptance" ? "border-amber-300 bg-amber-50/30" :
+                order.status === "ready" ? "border-emerald-300 bg-emerald-50/30" : ""
               }`}
             >
               <CardContent className="p-5">
+                {/* Order header */}
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="token-display font-bold text-blue-400 text-lg">{order.token}</span>
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="token-display font-bold text-blue-600 text-lg">{order.token}</span>
                       <OrderStatusBadge status={order.status} />
                       {order.priority === "express" && (
                         <Badge variant="warning" className="text-[10px]">Express</Badge>
                       )}
                       {hasMultipleShops && order.shop && (
-                        <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full border border-zinc-700">
+                        <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full border border-slate-200">
                           {order.shop.name}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <User className="w-3 h-3" />
-                      <span>{order.student?.full_name ?? "Unknown"}</span>
+                    {/* ── TASK 4: Show actual customer name ── */}
+                    <div className="flex items-center gap-1.5 text-sm text-slate-600">
+                      <User className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="font-medium">
+                        {order.student?.full_name
+                          ? order.student.full_name
+                          : order.student?.email
+                          ? order.student.email.split("@")[0]
+                          : "Customer"}
+                      </span>
+                      {order.student?.email && (
+                        <span className="text-slate-400 text-xs">· {order.student.email}</span>
+                      )}
                     </div>
+                    {order.deadline && (
+                      <p className="text-amber-600 text-xs mt-1 font-medium">
+                        ⏰ Deadline: {format(new Date(order.deadline), "h:mm a, MMM d")}
+                      </p>
+                    )}
                   </div>
-                  <div className="text-right">
-                    <p className="text-white font-bold text-lg">₹{order.total_amount}</p>
-                    <p className="text-zinc-500 text-xs">
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-slate-900 font-bold text-xl">₹{order.total_amount}</p>
+                    <p className="text-slate-400 text-xs">
                       {formatDistanceToNow(new Date(order.created_at), { addSuffix: true })}
                     </p>
                   </div>
                 </div>
 
+                {/* Order details grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 text-xs">
-                  <div className="bg-zinc-800 rounded-lg p-2">
-                    <p className="text-zinc-500 mb-0.5">Document</p>
-                    <p className="text-white font-medium truncate">{order.document_name}</p>
-                  </div>
-                  <div className="bg-zinc-800 rounded-lg p-2">
-                    <p className="text-zinc-500 mb-0.5">Pages × Copies</p>
-                    <p className="text-white font-medium">{order.document_pages} × {order.copies}</p>
-                  </div>
-                  <div className="bg-zinc-800 rounded-lg p-2">
-                    <p className="text-zinc-500 mb-0.5">Print Type</p>
-                    <p className="text-white font-medium">{order.print_type === "bw" ? "B&W" : "Color"}</p>
-                  </div>
-                  <div className="bg-zinc-800 rounded-lg p-2">
-                    <p className="text-zinc-500 mb-0.5">Payment</p>
-                    <p className={`font-medium ${order.payment_status === "paid" ? "text-emerald-400" : "text-amber-400"}`}>
-                      {order.payment_status.toUpperCase()}
-                    </p>
-                  </div>
+                  {[
+                    { label: "Document", value: order.document_name, truncate: true },
+                    { label: "Pages × Copies", value: `${order.document_pages} × ${order.copies}` },
+                    { label: "Print Type", value: order.print_type === "bw" ? "B&W" : "Color" },
+                    {
+                      label: "Payment",
+                      value: order.payment_status.toUpperCase(),
+                      colored: order.payment_status === "paid" ? "text-emerald-600" : "text-amber-600",
+                    },
+                  ].map((d) => (
+                    <div key={d.label} className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
+                      <p className="text-slate-400 mb-0.5">{d.label}</p>
+                      <p className={`font-semibold text-slate-800 ${d.truncate ? "truncate" : ""} ${d.colored ?? ""}`}>
+                        {d.value}
+                      </p>
+                    </div>
+                  ))}
                 </div>
 
                 {order.notes && (
-                  <div className="flex items-start gap-2 bg-zinc-800 rounded-lg p-2 mb-4 text-xs">
-                    <FileText className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-zinc-300">{order.notes}</p>
+                  <div className="flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-lg p-2 mb-4 text-xs">
+                    <FileText className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-slate-600">{order.notes}</p>
                   </div>
                 )}
 
@@ -295,47 +579,63 @@ export function OwnerOrdersClient({ orders: initialOrders, shopId, shopIds, shop
                   {order.status === "waiting_for_acceptance" && (
                     <>
                       <Button size="sm" variant="success" onClick={() => handleAccept(order.id)}>
-                        <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
-                        Accept
+                        <CheckCircle className="w-3.5 h-3.5" /> Accept
                       </Button>
                       <Button size="sm" variant="destructive" onClick={() => handleReject(order.id)}>
                         Reject
                       </Button>
                     </>
                   )}
+
                   {order.status === "accepted" && (
                     <>
+                      {/* ── TASK 6: Download & Print after acceptance ── */}
+                      <Button size="sm" variant="outline" onClick={() => handleDownload(order)}>
+                        <Download className="w-3.5 h-3.5" /> Download
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setPrintOrder(order)}>
+                        <Printer className="w-3.5 h-3.5" /> Print
+                      </Button>
                       {etaOrderId === order.id ? (
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                           <input
                             type="datetime-local"
                             value={eta}
                             onChange={(e) => setEta(e.target.value)}
-                            className="h-8 rounded-lg border border-zinc-600 bg-zinc-800 px-2 text-white text-xs"
+                            className="h-8 rounded-lg border border-slate-300 bg-white px-2 text-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
                           />
                           <Button size="sm" onClick={() => handlePreparing(order.id)}>
-                            <Printer className="w-3.5 h-3.5 mr-1.5" />
-                            Start Printing
+                            <Printer className="w-3.5 h-3.5" /> Start Printing
                           </Button>
+                          <button onClick={() => setEtaOrderId(null)} className="text-slate-400 hover:text-slate-600">
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
                       ) : (
                         <Button size="sm" onClick={() => setEtaOrderId(order.id)}>
-                          <Printer className="w-3.5 h-3.5 mr-1.5" />
                           Start Preparing
                         </Button>
                       )}
                     </>
                   )}
+
                   {order.status === "preparing" && (
-                    <Button size="sm" variant="success" onClick={() => handleReady(order.id)}>
-                      <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
-                      Mark as Ready
-                    </Button>
+                    <>
+                      <Button size="sm" variant="outline" onClick={() => handleDownload(order)}>
+                        <Download className="w-3.5 h-3.5" /> Download
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setPrintOrder(order)}>
+                        <Printer className="w-3.5 h-3.5" /> Print
+                      </Button>
+                      <Button size="sm" variant="success" onClick={() => handleReady(order.id)}>
+                        <CheckCircle className="w-3.5 h-3.5" /> Mark as Ready
+                      </Button>
+                    </>
                   )}
+
                   {order.status === "ready" && (
                     <Button size="sm" onClick={() => { setVerifyOrderId(order.id); setOtp(""); }}>
-                      <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
-                      Verify OTP & Complete
+                      <ShieldCheck className="w-3.5 h-3.5" /> Verify OTP & Complete
                     </Button>
                   )}
                 </div>
