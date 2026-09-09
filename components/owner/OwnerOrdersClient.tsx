@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle, Package, User, FileText,
   Printer, ShieldCheck, Download, X,
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/components/orders/OrderStatusBadge";
+import { OrderStatusAnimation } from "@/components/orders/OrderStatusAnimation";
 import { formatDistanceToNow, format } from "date-fns";
 
 type Order = {
@@ -494,15 +496,31 @@ export function OwnerOrdersClient({
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredOrders.map((order) => (
-            <Card
+          {filteredOrders.map((order, idx) => (
+            <motion.div
               key={order.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.04, duration: 0.25 }}
+              layout
+            >
+            <Card
               className={`transition-all ${
                 order.status === "waiting_for_acceptance" ? "border-amber-300 bg-amber-50/30" :
                 order.status === "ready" ? "border-emerald-300 bg-emerald-50/30" : ""
               }`}
             >
               <CardContent className="p-5">
+                {/* Compact status animation strip */}
+                <div className="mb-4 pb-4 border-b border-slate-100">
+                  <OrderStatusAnimation
+                    status={order.status}
+                    role="owner"
+                    token={order.token}
+                    showTimeline={false}
+                    compact={true}
+                  />
+                </div>
                 {/* Order header */}
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
@@ -641,6 +659,7 @@ export function OwnerOrdersClient({
                 </div>
               </CardContent>
             </Card>
+            </motion.div>
           ))}
         </div>
       )}
