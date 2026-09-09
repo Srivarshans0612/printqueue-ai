@@ -41,16 +41,16 @@ export default async function LocationsPage() {
     <div className="max-w-4xl mx-auto px-4 py-6 page-enter">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white mb-1">Campus Locations</h1>
-        <p className="text-zinc-400 text-sm">
+        <p className="text-slate-500 text-sm">
           Select a campus location to view available printing shops.
         </p>
       </div>
 
       {!locations || locations.length === 0 ? (
         <div className="text-center py-16">
-          <MapPin className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-          <p className="text-zinc-400">No locations available yet.</p>
-          <p className="text-zinc-600 text-sm mt-1">Check back soon.</p>
+          <MapPin className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+          <p className="text-slate-500">No locations available yet.</p>
+          <p className="text-slate-400 text-sm mt-1">Check back soon.</p>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
@@ -69,16 +69,16 @@ export default async function LocationsPage() {
                       <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">
                         <MapPin className="w-6 h-6 text-blue-400" />
                       </div>
-                      <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-colors mt-1" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-500 transition-colors mt-1" />
                     </div>
 
                     <h2 className="text-xl font-bold text-white mb-1">{location.name}</h2>
                     {location.description && (
-                      <p className="text-zinc-400 text-sm mb-4">{location.description}</p>
+                      <p className="text-slate-500 text-sm mb-4">{location.description}</p>
                     )}
 
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1.5 text-sm text-zinc-400">
+                      <div className="flex items-center gap-1.5 text-sm text-slate-500">
                         <Store className="w-3.5 h-3.5" />
                         <span>{shopCount} {shopCount === 1 ? "shop" : "shops"}</span>
                       </div>
@@ -110,3 +110,5 @@ export default async function LocationsPage() {
     </div>
   );
 }
+
+

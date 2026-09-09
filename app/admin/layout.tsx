@@ -26,7 +26,7 @@ export default async function AdminLayout({
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-slate-100">
       <DashboardNav profile={profile} unreadCount={unreadCount} />
       <main className="pt-16">{children}</main>
     </div>

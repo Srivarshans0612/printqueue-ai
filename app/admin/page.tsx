@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
     { label: "Approved Shops", value: approvedShops ?? 0, icon: CheckCircle, color: "text-emerald-400", href: "/admin/shops" },
     { label: "Pending Requests", value: pendingShops ?? 0, icon: Clock, color: "text-red-400", href: "/admin/shops" },
     { label: "Active Orders", value: activeOrders ?? 0, icon: Package, color: "text-purple-400", href: "/admin/orders" },
-    { label: "Completed Orders", value: completedOrders ?? 0, icon: TrendingUp, color: "text-zinc-400", href: "/admin/orders" },
+    { label: "Completed Orders", value: completedOrders ?? 0, icon: TrendingUp, color: "text-slate-500", href: "/admin/orders" },
     { label: "Total Revenue", value: `₹${totalRevenue}`, icon: TrendingUp, color: "text-emerald-400", href: "/admin/analytics" },
     { label: "Active Locations", value: locations ?? 0, icon: MapPin, color: "text-blue-400", href: "/admin/locations" },
   ];
@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
     <div className="max-w-6xl mx-auto px-4 py-6 page-enter space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-        <p className="text-zinc-400 text-sm mt-1">Platform overview and management</p>
+        <p className="text-slate-500 text-sm mt-1">Platform overview and management</p>
       </div>
 
       {/* Stats */}
@@ -67,10 +67,10 @@ export default async function AdminDashboard() {
           const Icon = s.icon;
           return (
             <Link key={s.label} href={s.href}>
-              <Card className="hover:border-zinc-700 transition-colors cursor-pointer">
+              <Card className="hover:border-slate-300 transition-colors cursor-pointer">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-zinc-400 text-xs">{s.label}</span>
+                    <span className="text-slate-500 text-xs">{s.label}</span>
                     <Icon className={`w-4 h-4 ${s.color}`} />
                   </div>
                   <p className="text-white font-bold text-2xl">{s.value}</p>
@@ -97,7 +97,7 @@ export default async function AdminDashboard() {
           <Card>
             <CardContent className="py-10 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
-              <p className="text-zinc-400 text-sm">No pending requests</p>
+              <p className="text-slate-500 text-sm">No pending requests</p>
             </CardContent>
           </Card>
         ) : (
@@ -111,10 +111,10 @@ export default async function AdminDashboard() {
                         <h3 className="text-white font-semibold">{req.shop_name}</h3>
                         <Badge variant="warning">PENDING</Badge>
                       </div>
-                      <p className="text-zinc-400 text-xs">
+                      <p className="text-slate-500 text-xs">
                         {req.owner?.full_name} · {req.location?.name}
                       </p>
-                      <p className="text-zinc-500 text-xs mt-0.5">
+                      <p className="text-slate-400 text-xs mt-0.5">
                         {formatDistanceToNow(new Date(req.created_at), { addSuffix: true })}
                       </p>
                     </div>
@@ -143,7 +143,7 @@ export default async function AdminDashboard() {
                 <CardContent className="p-5">
                   <Icon className="w-6 h-6 text-blue-400 mb-3" />
                   <h3 className="text-white font-semibold text-sm mb-1">{link.label}</h3>
-                  <p className="text-zinc-400 text-xs">{link.desc}</p>
+                  <p className="text-slate-500 text-xs">{link.desc}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -153,3 +153,5 @@ export default async function AdminDashboard() {
     </div>
   );
 }
+
+

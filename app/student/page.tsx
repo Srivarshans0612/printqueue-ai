@@ -64,7 +64,7 @@ export default async function StudentDashboard() {
         <h1 className="text-2xl font-bold text-white">
           Welcome back, {profile?.full_name?.split(" ")[0]} 👋
         </h1>
-        <p className="text-zinc-400 text-sm mt-1">
+        <p className="text-slate-500 text-sm mt-1">
           Ready to print smarter today?
         </p>
       </div>
@@ -115,9 +115,9 @@ export default async function StudentDashboard() {
           {activeOrders.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <Package className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
-                <p className="text-zinc-400 text-sm">No active orders</p>
-                <p className="text-zinc-500 text-xs mt-1 mb-4">Place your first order to get started</p>
+                <Package className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                <p className="text-slate-500 text-sm">No active orders</p>
+                <p className="text-slate-400 text-xs mt-1 mb-4">Place your first order to get started</p>
                 <Button size="sm" asChild>
                   <Link href="/student/order/new">Place an Order</Link>
                 </Button>
@@ -138,13 +138,13 @@ export default async function StudentDashboard() {
                             <StatusBadge status={order.status} />
                           </div>
                           <p className="text-white text-sm font-medium truncate">{order.document_name}</p>
-                          <p className="text-zinc-400 text-xs mt-0.5">
+                          <p className="text-slate-500 text-xs mt-0.5">
                             {order.shop?.name} · {order.shop?.location?.name}
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
                           <p className="text-white font-semibold text-sm">₹{order.total_amount}</p>
-                          <p className="text-zinc-500 text-xs mt-0.5">
+                          <p className="text-slate-400 text-xs mt-0.5">
                             {order.document_pages * order.copies} pages
                           </p>
                         </div>
@@ -178,15 +178,15 @@ export default async function StudentDashboard() {
             <CardContent>
               <div className="flex items-end gap-2 mb-2">
                 <span className="text-3xl font-bold text-emerald-400">{ecoAvg}</span>
-                <span className="text-zinc-400 text-sm mb-1">/100</span>
+                <span className="text-slate-500 text-sm mb-1">/100</span>
               </div>
-              <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-500 to-lime-400 rounded-full transition-all"
                   style={{ width: `${ecoAvg}%` }}
                 />
               </div>
-              <p className="text-xs text-zinc-500 mt-2">
+              <p className="text-xs text-slate-400 mt-2">
                 Digital ordering helps reduce unnecessary trips and paper waste.
               </p>
             </CardContent>
@@ -207,13 +207,13 @@ export default async function StudentDashboard() {
             </CardHeader>
             <CardContent className="space-y-3">
               {unreadNotifications.length === 0 ? (
-                <p className="text-zinc-500 text-xs">No new notifications</p>
+                <p className="text-slate-400 text-xs">No new notifications</p>
               ) : (
                 unreadNotifications.map((notif) => (
                   <div key={notif.id} className="border-l-2 border-blue-600 pl-3">
                     <p className="text-white text-xs font-medium">{notif.title}</p>
-                    <p className="text-zinc-400 text-xs mt-0.5 line-clamp-2">{notif.body}</p>
-                    <p className="text-zinc-600 text-[10px] mt-1">
+                    <p className="text-slate-500 text-xs mt-0.5 line-clamp-2">{notif.body}</p>
+                    <p className="text-slate-400 text-[10px] mt-1">
                       {formatDistanceToNow(new Date(notif.created_at), { addSuffix: true })}
                     </p>
                   </div>
@@ -226,23 +226,23 @@ export default async function StudentDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Store className="w-4 h-4 text-zinc-400" />
+                <Store className="w-4 h-4 text-slate-500" />
                 Your Stats
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400 text-xs">Total Orders</span>
+                <span className="text-slate-500 text-xs">Total Orders</span>
                 <span className="text-white text-sm font-semibold">{recentOrders?.length ?? 0}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400 text-xs">Completed</span>
+                <span className="text-slate-500 text-xs">Completed</span>
                 <span className="text-white text-sm font-semibold">
                   {recentOrders?.filter((o) => o.status === "picked_up").length ?? 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400 text-xs">Total Spent</span>
+                <span className="text-slate-500 text-xs">Total Spent</span>
                 <span className="text-white text-sm font-semibold">
                   ₹{recentOrders?.reduce((s, o) => s + o.total_amount, 0) ?? 0}
                 </span>
@@ -254,3 +254,5 @@ export default async function StudentDashboard() {
     </div>
   );
 }
+
+

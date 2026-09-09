@@ -29,7 +29,7 @@ export default async function StudentLayout({
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-slate-100">
       <DashboardNav profile={profile} unreadCount={unreadCount} />
       <main className="pt-16 pb-20 lg:pb-6">{children}</main>
     </div>

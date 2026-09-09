@@ -28,7 +28,7 @@ export default async function StudentOrdersPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">My Orders</h1>
-          <p className="text-zinc-400 text-sm mt-1">Track and manage your print orders</p>
+          <p className="text-slate-500 text-sm mt-1">Track and manage your print orders</p>
         </div>
         <Button size="sm" asChild>
           <Link href="/student/order/new">
@@ -41,7 +41,7 @@ export default async function StudentOrdersPage() {
       {/* Active Orders */}
       {activeOrders.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
             Active · {activeOrders.length}
           </h2>
           <div className="space-y-3">
@@ -55,7 +55,7 @@ export default async function StudentOrdersPage() {
       {/* Past Orders */}
       {pastOrders.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
             Past Orders · {pastOrders.length}
           </h2>
           <div className="space-y-3">
@@ -68,9 +68,9 @@ export default async function StudentOrdersPage() {
 
       {(!orders || orders.length === 0) && (
         <div className="text-center py-20">
-          <Package className="w-14 h-14 text-zinc-700 mx-auto mb-4" />
+          <Package className="w-14 h-14 text-slate-500 mx-auto mb-4" />
           <h2 className="text-white font-semibold text-lg mb-2">No orders yet</h2>
-          <p className="text-zinc-400 text-sm mb-6">
+          <p className="text-slate-500 text-sm mb-6">
             Place your first print order and track it in real-time.
           </p>
           <Button asChild>
@@ -100,7 +100,7 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
                 <OrderStatusBadge status={o.status} />
               </div>
               <p className="text-white text-sm font-medium truncate">{o.document_name}</p>
-              <div className="flex items-center gap-3 mt-1.5 text-xs text-zinc-500">
+              <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
                 <span className="flex items-center gap-1">
                   <Store className="w-3 h-3" />
                   {o.shop?.name}
@@ -113,10 +113,10 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
             </div>
             <div className="text-right flex-shrink-0 flex flex-col items-end gap-1">
               <p className="text-white font-bold">₹{o.total_amount as number}</p>
-              <p className="text-zinc-500 text-xs">
+              <p className="text-slate-400 text-xs">
                 {(o.document_pages as number) * (o.copies as number)} pages
               </p>
-              <ArrowRight className="w-4 h-4 text-zinc-600" />
+              <ArrowRight className="w-4 h-4 text-slate-400" />
             </div>
           </div>
 
@@ -131,3 +131,5 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
     </Link>
   );
 }
+
+

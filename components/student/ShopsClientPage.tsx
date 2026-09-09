@@ -96,17 +96,17 @@ export function ShopsClientPage({
     <div className="max-w-5xl mx-auto px-4 py-6 page-enter">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 text-zinc-400 text-sm mb-2">
+        <div className="flex items-center gap-2 text-slate-500 text-sm mb-2">
           <Link href="/student/locations" className="hover:text-white">
             Locations
           </Link>
           <span>/</span>
-          <span className="text-white">{selectedLocationName ?? "All Shops"}</span>
+          <span className="text-slate-900">{selectedLocationName ?? "All Shops"}</span>
         </div>
         <h1 className="text-2xl font-bold text-white">
           {selectedLocationName ? `${selectedLocationName} Shops` : "All Printing Shops"}
         </h1>
-        <p className="text-zinc-400 text-sm mt-1">
+        <p className="text-slate-500 text-sm mt-1">
           {shops.length} approved {shops.length === 1 ? "shop" : "shops"} found
         </p>
       </div>
@@ -128,10 +128,10 @@ export function ShopsClientPage({
                 </Badge>
               </div>
               <h3 className="text-white font-bold text-lg leading-tight">{topShop.shop.name}</h3>
-              <p className="text-zinc-300 text-sm mt-1">{topShop.recommendation.explanation}</p>
+              <p className="text-slate-600 text-sm mt-1">{topShop.recommendation.explanation}</p>
               <div className="flex flex-wrap gap-2 mt-3">
                 {topShop.recommendation.reasons.slice(0, 4).map((r) => (
-                  <div key={r} className="flex items-center gap-1.5 text-xs text-zinc-400">
+                  <div key={r} className="flex items-center gap-1.5 text-xs text-slate-500">
                     <CheckCircle className="w-3 h-3 text-lime-400" />
                     <span>{r}</span>
                   </div>
@@ -139,17 +139,17 @@ export function ShopsClientPage({
               </div>
               <div className="flex items-center gap-4 mt-3">
                 <div>
-                  <p className="text-[10px] text-zinc-500 uppercase">Predicted ready</p>
+                  <p className="text-[10px] text-slate-400 uppercase">Predicted ready</p>
                   <p className="text-white text-sm font-semibold">
                     {format(new Date(topShop.recommendation.predicted_ready_at), "h:mm a")}
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-zinc-500 uppercase">Queue</p>
+                  <p className="text-[10px] text-slate-400 uppercase">Queue</p>
                   <p className="text-white text-sm font-semibold">{topShop.shop.current_queue} orders</p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-zinc-500 uppercase">B&W Price</p>
+                  <p className="text-[10px] text-slate-400 uppercase">B&W Price</p>
                   <p className="text-white text-sm font-semibold">₹{topShop.shop.price_bw}/page</p>
                 </div>
               </div>
@@ -173,7 +173,7 @@ export function ShopsClientPage({
               const url = e.target.value ? `/student/shops?location=${e.target.value}` : "/student/shops";
               router.push(url);
             }}
-            className="h-10 rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-10 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Locations</option>
             {locations.map((l) => (
@@ -188,12 +188,12 @@ export function ShopsClientPage({
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
           placeholder="Your deadline (optional)"
-          className="h-10 flex-1 rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
             placeholder="Search shops..."
             value={search}
@@ -208,7 +208,7 @@ export function ShopsClientPage({
           className={`flex items-center gap-2 px-3 h-10 rounded-lg border text-sm font-medium transition-colors ${
             showOnlyOpen
               ? "border-emerald-600 bg-emerald-600/10 text-emerald-400"
-              : "border-zinc-700 text-zinc-400 hover:text-white"
+              : "border-slate-300 text-slate-500 hover:text-white"
           }`}
         >
           <div className={`w-2 h-2 rounded-full ${showOnlyOpen ? "bg-emerald-400" : "bg-zinc-600"}`} />
@@ -231,7 +231,7 @@ export function ShopsClientPage({
             className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               sort === option.value
                 ? "bg-blue-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:text-white"
+                : "bg-slate-100 text-slate-500 hover:text-white"
             }`}
           >
             {option.label}
@@ -242,9 +242,9 @@ export function ShopsClientPage({
       {/* Shop list */}
       {sorted.length === 0 ? (
         <div className="text-center py-16">
-          <Store className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-          <p className="text-zinc-400">No shops found</p>
-          <p className="text-zinc-600 text-sm mt-1">Try a different location or remove filters</p>
+          <Store className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+          <p className="text-slate-500">No shops found</p>
+          <p className="text-slate-400 text-sm mt-1">Try a different location or remove filters</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -287,7 +287,7 @@ function ShopCard({
               )}
             </div>
 
-            <div className="flex items-center gap-1 text-zinc-400 text-xs mb-3">
+            <div className="flex items-center gap-1 text-slate-500 text-xs mb-3">
               <MapPin className="w-3 h-3" />
               <span>{shop.address}</span>
               {shop.location && (
@@ -302,27 +302,27 @@ function ShopCard({
               <div className="flex items-center gap-1.5">
                 <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                 <span className="text-white text-sm font-medium">{shop.rating.toFixed(1)}</span>
-                <span className="text-zinc-500 text-xs">({shop.total_reviews})</span>
+                <span className="text-slate-400 text-xs">({shop.total_reviews})</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-zinc-400" />
-                <span className="text-zinc-300 text-sm">{shop.current_queue} in queue</span>
+                <Users className="w-3.5 h-3.5 text-slate-500" />
+                <span className="text-slate-600 text-sm">{shop.current_queue} in queue</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-zinc-400" />
-                <span className="text-zinc-300 text-sm">~{shop.avg_completion_minutes}min</span>
+                <Clock className="w-3.5 h-3.5 text-slate-500" />
+                <span className="text-slate-600 text-sm">~{shop.avg_completion_minutes}min</span>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col items-end gap-2 flex-shrink-0">
             <div className="text-right">
-              <p className="text-white font-bold text-base">₹{shop.price_bw}<span className="text-zinc-500 text-xs font-normal">/pg B&W</span></p>
-              <p className="text-zinc-400 text-xs">₹{shop.price_color}/pg Color</p>
+              <p className="text-white font-bold text-base">₹{shop.price_bw}<span className="text-slate-400 text-xs font-normal">/pg B&W</span></p>
+              <p className="text-slate-500 text-xs">₹{shop.price_color}/pg Color</p>
             </div>
 
             <div className="text-right">
-              <p className="text-[10px] text-zinc-500">Ready ~</p>
+              <p className="text-[10px] text-slate-400">Ready ~</p>
               <p className="text-white text-xs font-medium">
                 {format(new Date(recommendation.predicted_ready_at), "h:mm a")}
               </p>
@@ -340,10 +340,12 @@ function ShopCard({
         {isTop && recommendation.explanation && (
           <div className="mt-3 flex items-start gap-2 bg-lime-500/5 border border-lime-500/15 rounded-lg px-3 py-2">
             <Brain className="w-3.5 h-3.5 text-lime-400 flex-shrink-0 mt-0.5" />
-            <p className="text-zinc-300 text-xs">{recommendation.explanation}</p>
+            <p className="text-slate-600 text-xs">{recommendation.explanation}</p>
           </div>
         )}
       </CardContent>
     </Card>
   );
 }
+
+

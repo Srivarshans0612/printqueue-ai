@@ -91,7 +91,7 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
             <Card key={s.label}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-zinc-400 text-xs">{s.label}</span>
+                  <span className="text-slate-500 text-xs">{s.label}</span>
                   <Icon className={`w-4 h-4 ${s.color}`} />
                 </div>
                 <p className="text-white font-bold text-2xl">{s.value}</p>
@@ -132,7 +132,7 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
           </CardHeader>
           <CardContent>
             {shopData.length === 0 ? (
-              <p className="text-zinc-500 text-sm text-center py-8">No data yet</p>
+              <p className="text-slate-400 text-sm text-center py-8">No data yet</p>
             ) : (
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={shopData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
@@ -155,7 +155,7 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
           </CardHeader>
           <CardContent>
             {statusData.length === 0 ? (
-              <p className="text-zinc-500 text-sm text-center py-8">No data yet</p>
+              <p className="text-slate-400 text-sm text-center py-8">No data yet</p>
             ) : (
               <>
                 <ResponsiveContainer width="100%" height={180}>
@@ -172,7 +172,7 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
                 </ResponsiveContainer>
                 <div className="flex flex-wrap justify-center gap-3 mt-2">
                   {statusData.map((d, i) => (
-                    <div key={d.name} className="flex items-center gap-1.5 text-xs text-zinc-400">
+                    <div key={d.name} className="flex items-center gap-1.5 text-xs text-slate-500">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
                       {d.name}: {d.value}
                     </div>
@@ -207,3 +207,4 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
     </div>
   );
 }
+

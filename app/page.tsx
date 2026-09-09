@@ -337,7 +337,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className={`text-sm font-medium ${
-                    step.done ? "text-emerald-400" : step.active ? "text-white" : "text-zinc-500"
+                    step.done ? "text-emerald-400" : step.active ? "text-slate-900" : "text-zinc-500"
                   }`}>
                     {step.label}
                   </span>
@@ -418,3 +418,4 @@ export default function LandingPage() {
     </div>
   );
 }
+

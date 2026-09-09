@@ -100,8 +100,8 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
       {/* Locations list */}
       {locations.length === 0 ? (
         <div className="text-center py-12">
-          <MapPin className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-          <p className="text-zinc-400">No locations yet</p>
+          <MapPin className="w-10 h-10 text-slate-500 mx-auto mb-3" />
+          <p className="text-slate-500">No locations yet</p>
         </div>
       ) : (
         locations.map((location) => (
@@ -117,13 +117,13 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
                     </Badge>
                   </div>
                   {location.description && (
-                    <p className="text-zinc-400 text-xs">{location.description}</p>
+                    <p className="text-slate-500 text-xs">{location.description}</p>
                   )}
                 </div>
 
                 <button
                   onClick={() => handleToggle(location.id, location.is_active)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400 hover:text-white text-xs transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-slate-500 hover:text-white text-xs transition-colors"
                 >
                   {location.is_active ? (
                     <><EyeOff className="w-3.5 h-3.5" /> Disable</>
@@ -139,3 +139,4 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
     </div>
   );
 }
+

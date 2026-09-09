@@ -16,9 +16,10 @@ export default async function AdminAnalyticsPage() {
     <div className="max-w-6xl mx-auto px-4 py-6 page-enter space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-white">Platform Analytics</h1>
-        <p className="text-zinc-400 text-sm mt-1">Comprehensive platform metrics and insights</p>
+        <p className="text-slate-500 text-sm mt-1">Comprehensive platform metrics and insights</p>
       </div>
       <AdminAnalyticsClient orders={orders ?? []} shops={shops ?? []} />
     </div>
   );
 }
+

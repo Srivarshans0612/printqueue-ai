@@ -24,3 +24,4 @@ export default async function OwnerAnalyticsPage() {
 
   return <OwnerAnalyticsClient orders={orders ?? []} shopName={shop.name} />;
 }
+

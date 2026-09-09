@@ -39,23 +39,23 @@ export default async function OwnerDashboard() {
 
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center page-enter">
-        <Store className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
+        <Store className="w-16 h-16 text-slate-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-white mb-3">
           {shopRequest ? "Shop Request Pending" : "Register Your Shop"}
         </h1>
         {shopRequest ? (
           <>
-            <p className="text-zinc-400 mb-2">
-              Your shop request for <strong className="text-white">{shopRequest.shop_name}</strong> is under review.
+            <p className="text-slate-500 mb-2">
+              Your shop request for <strong className="text-slate-900">{shopRequest.shop_name}</strong> is under review.
             </p>
             <Badge variant="warning">PENDING APPROVAL</Badge>
-            <p className="text-zinc-500 text-sm mt-4">
+            <p className="text-slate-400 text-sm mt-4">
               An admin will review your request soon. You&apos;ll receive a notification once approved.
             </p>
           </>
         ) : (
           <>
-            <p className="text-zinc-400 mb-6">
+            <p className="text-slate-500 mb-6">
               Submit your shop details to get approved on the platform and start receiving digital print orders.
             </p>
             <Button asChild>
@@ -100,7 +100,7 @@ export default async function OwnerDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white mb-1">Owner Dashboard</h1>
-        <p className="text-zinc-400 text-sm">
+        <p className="text-slate-500 text-sm">
           Managing <span className="text-white font-semibold">{shops.length}</span> {shops.length === 1 ? "shop" : "shops"}
         </p>
       </div>
@@ -113,13 +113,13 @@ export default async function OwnerDashboard() {
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="min-w-0">
                   <p className="text-white font-semibold text-sm truncate">{shop.name}</p>
-                  <p className="text-zinc-500 text-xs truncate">{shop.location?.name}</p>
+                  <p className="text-slate-400 text-xs truncate">{shop.location?.name}</p>
                 </div>
                 <Badge variant={shop.status === "approved" ? "success" : "destructive"} className="text-[10px] flex-shrink-0">
                   {shop.status.toUpperCase()}
                 </Badge>
               </div>
-              <div className="flex items-center justify-between text-xs text-zinc-400 mb-3">
+              <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
                 <span>Queue: {shop.current_queue}</span>
                 <span>₹{shop.price_bw}/pg B&W</span>
               </div>
@@ -144,7 +144,7 @@ export default async function OwnerDashboard() {
             <Card key={stat.label}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-zinc-400 text-xs">{stat.label}</span>
+                  <span className="text-slate-500 text-xs">{stat.label}</span>
                   <Icon className={`w-4 h-4 ${stat.color}`} />
                 </div>
                 <p className="text-white font-bold text-2xl">{stat.value}</p>
@@ -170,8 +170,8 @@ export default async function OwnerDashboard() {
           {!pendingOrders || pendingOrders.length === 0 ? (
             <Card>
               <CardContent className="py-10 text-center">
-                <Package className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
-                <p className="text-zinc-400 text-sm">No pending orders</p>
+                <Package className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+                <p className="text-slate-500 text-sm">No pending orders</p>
               </CardContent>
             </Card>
           ) : (
@@ -186,16 +186,16 @@ export default async function OwnerDashboard() {
                           <OrderStatusBadge status={order.status} />
                           {/* Show which shop */}
                           {shops.length > 1 && (
-                            <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
                               {order.shop?.name}
                             </span>
                           )}
                         </div>
                         <p className="text-white text-sm font-medium">{order.document_name}</p>
-                        <p className="text-zinc-400 text-xs">
+                        <p className="text-slate-500 text-xs">
                           {order.student?.full_name} · {order.document_pages * order.copies} pages
                         </p>
-                        <p className="text-zinc-500 text-xs mt-0.5">
+                        <p className="text-slate-400 text-xs mt-0.5">
                           {formatDistanceToNow(new Date(order.created_at), { addSuffix: true })}
                         </p>
                       </div>
@@ -218,21 +218,21 @@ export default async function OwnerDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-zinc-400" />
+                <TrendingUp className="w-4 h-4 text-slate-500" />
                 Today Summary
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400">Total orders</span>
-                <span className="text-white">{todayOrders?.length ?? 0}</span>
+                <span className="text-slate-500">Total orders</span>
+                <span className="text-slate-900">{todayOrders?.length ?? 0}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400">Completed</span>
+                <span className="text-slate-500">Completed</span>
                 <span className="text-emerald-400">{totalCompleted}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-zinc-400">Revenue</span>
+                <span className="text-slate-500">Revenue</span>
                 <span className="text-white font-semibold">₹{totalRevenue}</span>
               </div>
               <Button size="sm" variant="ghost" className="w-full mt-2 text-xs" asChild>
@@ -244,16 +244,16 @@ export default async function OwnerDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
-                <Store className="w-4 h-4 text-zinc-400" />
+                <Store className="w-4 h-4 text-slate-500" />
                 My Shops ({shops.length})
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {shops.map((shop) => (
                 <div key={shop.id} className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-300 truncate max-w-[120px]">{shop.name}</span>
+                  <span className="text-slate-600 truncate max-w-[120px]">{shop.name}</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-zinc-500">{shop.current_queue} in queue</span>
+                    <span className="text-slate-400">{shop.current_queue} in queue</span>
                     <div className={`w-2 h-2 rounded-full ${shop.is_open ? "bg-emerald-400" : "bg-zinc-600"}`} />
                   </div>
                 </div>
@@ -268,3 +268,5 @@ export default async function OwnerDashboard() {
     </div>
   );
 }
+
+
