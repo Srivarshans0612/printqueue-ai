@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
   Package, DollarSign, Users, TrendingUp, Store,
@@ -40,7 +40,7 @@ export default async function OwnerDashboard() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 text-center page-enter">
         <Store className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-3">
+        <h1 className="text-2xl font-bold text-slate-900 mb-3">
           {shopRequest ? "Shop Request Pending" : "Register Your Shop"}
         </h1>
         {shopRequest ? (
@@ -99,9 +99,9 @@ export default async function OwnerDashboard() {
     <div className="max-w-6xl mx-auto px-4 py-6 page-enter space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white mb-1">Owner Dashboard</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-1">Owner Dashboard</h1>
         <p className="text-slate-500 text-sm">
-          Managing <span className="text-white font-semibold">{shops.length}</span> {shops.length === 1 ? "shop" : "shops"}
+          Managing <span className="text-slate-900 font-semibold">{shops.length}</span> {shops.length === 1 ? "shop" : "shops"}
         </p>
       </div>
 
@@ -112,7 +112,7 @@ export default async function OwnerDashboard() {
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="min-w-0">
-                  <p className="text-white font-semibold text-sm truncate">{shop.name}</p>
+                  <p className="text-slate-900 font-semibold text-sm truncate">{shop.name}</p>
                   <p className="text-slate-400 text-xs truncate">{shop.location?.name}</p>
                 </div>
                 <Badge variant={shop.status === "approved" ? "success" : "destructive"} className="text-[10px] flex-shrink-0">
@@ -147,7 +147,7 @@ export default async function OwnerDashboard() {
                   <span className="text-slate-500 text-xs">{stat.label}</span>
                   <Icon className={`w-4 h-4 ${stat.color}`} />
                 </div>
-                <p className="text-white font-bold text-2xl">{stat.value}</p>
+                <p className="text-slate-900 font-bold text-2xl">{stat.value}</p>
               </CardContent>
             </Card>
           );
@@ -158,7 +158,7 @@ export default async function OwnerDashboard() {
         {/* Pending orders across all shops */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-amber-400" />
               Awaiting Acceptance
             </h2>
@@ -191,7 +191,7 @@ export default async function OwnerDashboard() {
                             </span>
                           )}
                         </div>
-                        <p className="text-white text-sm font-medium">{order.document_name}</p>
+                        <p className="text-slate-900 text-sm font-medium">{order.document_name}</p>
                         <p className="text-slate-500 text-xs">
                           {order.student?.full_name} · {order.document_pages * order.copies} pages
                         </p>
@@ -200,7 +200,7 @@ export default async function OwnerDashboard() {
                         </p>
                       </div>
                       <div className="flex flex-col gap-2 items-end">
-                        <p className="text-white font-semibold text-sm">₹{order.total_amount}</p>
+                        <p className="text-slate-900 font-semibold text-sm">₹{order.total_amount}</p>
                         <Button size="sm" variant="success" asChild>
                           <Link href="/owner/orders">Manage</Link>
                         </Button>
@@ -233,7 +233,7 @@ export default async function OwnerDashboard() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500">Revenue</span>
-                <span className="text-white font-semibold">₹{totalRevenue}</span>
+                <span className="text-slate-900 font-semibold">₹{totalRevenue}</span>
               </div>
               <Button size="sm" variant="ghost" className="w-full mt-2 text-xs" asChild>
                 <Link href="/owner/analytics">View Analytics →</Link>
@@ -268,5 +268,6 @@ export default async function OwnerDashboard() {
     </div>
   );
 }
+
 
 

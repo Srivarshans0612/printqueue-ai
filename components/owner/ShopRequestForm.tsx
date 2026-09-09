@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -44,10 +44,10 @@ export function ShopRequestForm({ locations, existingRequest }: ShopRequestFormP
         <Card className="border-amber-500/30">
           <CardContent className="p-6 text-center">
             <Clock className="w-12 h-12 text-amber-400 mx-auto mb-3" />
-            <h2 className="text-white font-semibold text-lg mb-2">Request Under Review</h2>
+            <h2 className="text-slate-900 font-semibold text-lg mb-2">Request Under Review</h2>
             <p className="text-zinc-400 text-sm mb-3">
               Your shop request for{" "}
-              <strong className="text-white">{existingRequest.shop_name}</strong> is
+              <strong className="text-slate-900">{existingRequest.shop_name}</strong> is
               pending admin approval.
             </p>
             <Badge variant="warning">PENDING</Badge>
@@ -76,7 +76,7 @@ export function ShopRequestForm({ locations, existingRequest }: ShopRequestFormP
           variant="ghost"
           size="sm"
           onClick={() => setShowForm(false)}
-          className="text-zinc-400"
+          className="text-slate-400"
         >
           ← Back
         </Button>
@@ -108,7 +108,7 @@ export function ShopRequestForm({ locations, existingRequest }: ShopRequestFormP
               <select
                 name="location_id"
                 required
-                className="w-full h-10 rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-10 rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select location...</option>
                 {locations.map((l) => (
@@ -165,7 +165,7 @@ export function ShopRequestForm({ locations, existingRequest }: ShopRequestFormP
                 name="description"
                 rows={3}
                 placeholder="Tell students about your shop..."
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 py-2 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full rounded-lg border border-zinc-700 bg-zinc-800/60 px-3 py-2 text-sm text-slate-900 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />
             </div>
 
@@ -178,3 +178,4 @@ export function ShopRequestForm({ locations, existingRequest }: ShopRequestFormP
     </div>
   );
 }
+

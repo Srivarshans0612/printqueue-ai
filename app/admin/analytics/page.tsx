@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/server";
+﻿import { createAdminClient } from "@/lib/supabase/server";
 import { AdminAnalyticsClient } from "@/components/admin/AdminAnalyticsClient";
 
 export default async function AdminAnalyticsPage() {
@@ -22,4 +22,5 @@ export default async function AdminAnalyticsPage() {
     </div>
   );
 }
+
 

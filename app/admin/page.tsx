@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/server";
+﻿import { createAdminClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
   Users,
@@ -73,7 +73,7 @@ export default async function AdminDashboard() {
                     <span className="text-slate-500 text-xs">{s.label}</span>
                     <Icon className={`w-4 h-4 ${s.color}`} />
                   </div>
-                  <p className="text-white font-bold text-2xl">{s.value}</p>
+                  <p className="text-slate-900 font-bold text-2xl">{s.value}</p>
                 </CardContent>
               </Card>
             </Link>
@@ -84,7 +84,7 @@ export default async function AdminDashboard() {
       {/* Pending shop requests */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-amber-400" />
             Pending Shop Requests
           </h2>
@@ -108,7 +108,7 @@ export default async function AdminDashboard() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-white font-semibold">{req.shop_name}</h3>
+                        <h3 className="text-slate-900 font-semibold">{req.shop_name}</h3>
                         <Badge variant="warning">PENDING</Badge>
                       </div>
                       <p className="text-slate-500 text-xs">
@@ -142,7 +142,7 @@ export default async function AdminDashboard() {
               <Card className="hover:border-blue-600/40 transition-colors cursor-pointer">
                 <CardContent className="p-5">
                   <Icon className="w-6 h-6 text-blue-400 mb-3" />
-                  <h3 className="text-white font-semibold text-sm mb-1">{link.label}</h3>
+                  <h3 className="text-slate-900 font-semibold text-sm mb-1">{link.label}</h3>
                   <p className="text-slate-500 text-xs">{link.desc}</p>
                 </CardContent>
               </Card>
@@ -153,5 +153,6 @@ export default async function AdminDashboard() {
     </div>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Printer, Mail, Lock, ArrowRight } from "lucide-react";
@@ -82,3 +82,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

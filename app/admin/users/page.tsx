@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/server";
+﻿import { createAdminClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, GraduationCap, Store, Shield } from "lucide-react";
@@ -36,7 +36,7 @@ export default async function AdminUsersPage() {
               <CardContent className="p-4 flex items-center gap-3">
                 <Icon className={`w-5 h-5 ${s.color}`} />
                 <div>
-                  <p className="text-white font-bold text-xl">{s.count}</p>
+                  <p className="text-slate-900 font-bold text-xl">{s.count}</p>
                   <p className="text-slate-500 text-xs">{s.label}</p>
                 </div>
               </CardContent>
@@ -61,7 +61,7 @@ export default async function AdminUsersPage() {
               <tbody>
                 {profiles?.map((profile) => (
                   <tr key={profile.id} className="border-b border-slate-200/50 hover:bg-zinc-900/50">
-                    <td className="px-5 py-3 text-white font-medium">{profile.full_name}</td>
+                    <td className="px-5 py-3 text-slate-900 font-medium">{profile.full_name}</td>
                     <td className="px-5 py-3 text-slate-500">{profile.email}</td>
                     <td className="px-5 py-3">
                       <Badge variant={
@@ -91,5 +91,6 @@ export default async function AdminUsersPage() {
     </div>
   );
 }
+
 
 

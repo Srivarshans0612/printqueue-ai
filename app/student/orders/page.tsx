@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Package, Clock, CheckCircle, ArrowRight, Store } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -69,7 +69,7 @@ export default async function StudentOrdersPage() {
       {(!orders || orders.length === 0) && (
         <div className="text-center py-20">
           <Package className="w-14 h-14 text-slate-500 mx-auto mb-4" />
-          <h2 className="text-white font-semibold text-lg mb-2">No orders yet</h2>
+          <h2 className="text-slate-900 font-semibold text-lg mb-2">No orders yet</h2>
           <p className="text-slate-500 text-sm mb-6">
             Place your first print order and track it in real-time.
           </p>
@@ -99,7 +99,7 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
                 <span className="token-display text-base font-bold text-blue-400">{o.token}</span>
                 <OrderStatusBadge status={o.status} />
               </div>
-              <p className="text-white text-sm font-medium truncate">{o.document_name}</p>
+              <p className="text-slate-900 text-sm font-medium truncate">{o.document_name}</p>
               <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
                 <span className="flex items-center gap-1">
                   <Store className="w-3 h-3" />
@@ -112,7 +112,7 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
               </div>
             </div>
             <div className="text-right flex-shrink-0 flex flex-col items-end gap-1">
-              <p className="text-white font-bold">₹{o.total_amount as number}</p>
+              <p className="text-slate-900 font-bold">₹{o.total_amount as number}</p>
               <p className="text-slate-400 text-xs">
                 {(o.document_pages as number) * (o.copies as number)} pages
               </p>
@@ -131,5 +131,6 @@ function OrderCard({ order }: { order: Record<string, unknown> }) {
     </Link>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
@@ -127,7 +127,7 @@ export function ShopsClientPage({
                   {topShop.recommendation.confidence}% confidence
                 </Badge>
               </div>
-              <h3 className="text-white font-bold text-lg leading-tight">{topShop.shop.name}</h3>
+              <h3 className="text-slate-900 font-bold text-lg leading-tight">{topShop.shop.name}</h3>
               <p className="text-slate-600 text-sm mt-1">{topShop.recommendation.explanation}</p>
               <div className="flex flex-wrap gap-2 mt-3">
                 {topShop.recommendation.reasons.slice(0, 4).map((r) => (
@@ -140,17 +140,17 @@ export function ShopsClientPage({
               <div className="flex items-center gap-4 mt-3">
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase">Predicted ready</p>
-                  <p className="text-white text-sm font-semibold">
+                  <p className="text-slate-900 text-sm font-semibold">
                     {format(new Date(topShop.recommendation.predicted_ready_at), "h:mm a")}
                   </p>
                 </div>
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase">Queue</p>
-                  <p className="text-white text-sm font-semibold">{topShop.shop.current_queue} orders</p>
+                  <p className="text-slate-900 text-sm font-semibold">{topShop.shop.current_queue} orders</p>
                 </div>
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase">B&W Price</p>
-                  <p className="text-white text-sm font-semibold">₹{topShop.shop.price_bw}/page</p>
+                  <p className="text-slate-900 text-sm font-semibold">₹{topShop.shop.price_bw}/page</p>
                 </div>
               </div>
             </div>
@@ -173,7 +173,7 @@ export function ShopsClientPage({
               const url = e.target.value ? `/student/shops?location=${e.target.value}` : "/student/shops";
               router.push(url);
             }}
-            className="h-10 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-10 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Locations</option>
             {locations.map((l) => (
@@ -188,7 +188,7 @@ export function ShopsClientPage({
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
           placeholder="Your deadline (optional)"
-          className="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="h-10 flex-1 rounded-lg border border-slate-300 bg-slate-100/60 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         {/* Search */}
@@ -278,7 +278,7 @@ function ShopCard({
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <h3 className="text-white font-bold text-lg leading-tight">{shop.name}</h3>
+              <h3 className="text-slate-900 font-bold text-lg leading-tight">{shop.name}</h3>
               {isTop && <Badge variant="lime" className="text-[10px]">AI Pick</Badge>}
               {!shop.is_open ? (
                 <Badge variant="destructive" className="text-[10px]">Closed</Badge>
@@ -301,7 +301,7 @@ function ShopCard({
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-1.5">
                 <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                <span className="text-white text-sm font-medium">{shop.rating.toFixed(1)}</span>
+                <span className="text-slate-900 text-sm font-medium">{shop.rating.toFixed(1)}</span>
                 <span className="text-slate-400 text-xs">({shop.total_reviews})</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -317,13 +317,13 @@ function ShopCard({
 
           <div className="flex flex-col items-end gap-2 flex-shrink-0">
             <div className="text-right">
-              <p className="text-white font-bold text-base">₹{shop.price_bw}<span className="text-slate-400 text-xs font-normal">/pg B&W</span></p>
+              <p className="text-slate-900 font-bold text-base">₹{shop.price_bw}<span className="text-slate-400 text-xs font-normal">/pg B&W</span></p>
               <p className="text-slate-500 text-xs">₹{shop.price_color}/pg Color</p>
             </div>
 
             <div className="text-right">
               <p className="text-[10px] text-slate-400">Ready ~</p>
-              <p className="text-white text-xs font-medium">
+              <p className="text-slate-900 text-xs font-medium">
                 {format(new Date(recommendation.predicted_ready_at), "h:mm a")}
               </p>
             </div>
@@ -347,5 +347,6 @@ function ShopCard({
     </Card>
   );
 }
+
 
 

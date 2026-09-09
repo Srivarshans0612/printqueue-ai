@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -184,7 +184,7 @@ export default function ToolsPage() {
               <div className="space-y-2 text-sm mb-3">
                 <div className="flex justify-between text-zinc-400">
                   <span>{pages} pages × {copies} copies × ₹{pricePerPage}</span>
-                  <span className="text-white">₹{Math.round(base)}</span>
+                  <span className="text-slate-900">₹{Math.round(base)}</span>
                 </div>
                 {priority === "express" && (
                   <div className="flex justify-between text-zinc-400">
@@ -195,7 +195,7 @@ export default function ToolsPage() {
               </div>
               <div className="flex items-center justify-between border-t border-zinc-700 pt-3">
                 <span className="text-zinc-400 text-sm">Total</span>
-                <span className="text-white font-bold text-2xl">₹{total}</span>
+                <span className="text-slate-900 font-bold text-2xl">₹{total}</span>
               </div>
             </div>
           </CardContent>
@@ -239,7 +239,7 @@ export default function ToolsPage() {
               </Badge>
 
               <div className="space-y-2 text-sm text-zinc-400">
-                <p>Total pages: <strong className="text-white">{pages * copies}</strong></p>
+                <p>Total pages: <strong className="text-slate-900">{pages * copies}</strong></p>
                 <p>Fewer pages → higher eco score</p>
               </div>
             </div>
@@ -273,7 +273,7 @@ export default function ToolsPage() {
               <button
                 key={q}
                 onClick={() => setAiInput(q)}
-                className="w-full text-left px-3 py-2 rounded-lg border border-zinc-800 hover:border-zinc-600 text-zinc-400 hover:text-white text-xs transition-colors"
+                className="w-full text-left px-3 py-2 rounded-lg border border-zinc-800 hover:border-zinc-600 text-zinc-400 hover:text-slate-900 text-xs transition-colors"
               >
                 {q}
               </button>
@@ -313,3 +313,4 @@ export default function ToolsPage() {
     </div>
   );
 }
+

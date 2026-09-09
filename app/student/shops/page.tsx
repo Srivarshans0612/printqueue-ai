@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { ShopsClientPage } from "@/components/student/ShopsClientPage";
 
 export default async function ShopsPage(props: {
@@ -37,3 +37,4 @@ export default async function ShopsPage(props: {
     />
   );
 }
+

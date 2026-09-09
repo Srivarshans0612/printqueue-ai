@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -191,3 +191,4 @@ export function ShopProfileClient({ shop }: { shop: Shop }) {
     </div>
   );
 }
+

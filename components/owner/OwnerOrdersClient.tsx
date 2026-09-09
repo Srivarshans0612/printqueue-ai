@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
@@ -436,7 +436,7 @@ export function OwnerOrdersClient({
             onClick={() => setFilterShopId("all")}
             className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
               filterShopId === "all"
-                ? "bg-blue-600 text-white border-blue-600"
+                ? "bg-blue-600 text-slate-900 border-blue-600"
                 : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
             }`}
           >
@@ -448,7 +448,7 @@ export function OwnerOrdersClient({
               onClick={() => setFilterShopId(s.id)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                 filterShopId === s.id
-                  ? "bg-blue-600 text-white border-blue-600"
+                  ? "bg-blue-600 text-slate-900 border-blue-600"
                   : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
               }`}
             >
@@ -471,7 +471,7 @@ export function OwnerOrdersClient({
             onClick={() => setFilter(tab.key)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0 border ${
               filter === tab.key
-                ? "bg-blue-600 text-white border-blue-600"
+                ? "bg-blue-600 text-slate-900 border-blue-600"
                 : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
             }`}
           >
@@ -647,3 +647,4 @@ export function OwnerOrdersClient({
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { OwnerAnalyticsClient } from "@/components/owner/OwnerAnalyticsClient";
 
@@ -24,4 +24,5 @@ export default async function OwnerAnalyticsPage() {
 
   return <OwnerAnalyticsClient orders={orders ?? []} shopName={shop.name} />;
 }
+
 

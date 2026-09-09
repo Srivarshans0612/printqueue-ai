@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -111,7 +111,7 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
                     <MapPin className="w-4 h-4 text-blue-400" />
-                    <h3 className="text-white font-semibold">{location.name}</h3>
+                    <h3 className="text-slate-900 font-semibold">{location.name}</h3>
                     <Badge variant={location.is_active ? "success" : "secondary"}>
                       {location.is_active ? "Active" : "Disabled"}
                     </Badge>
@@ -123,7 +123,7 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
 
                 <button
                   onClick={() => handleToggle(location.id, location.is_active)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-slate-500 hover:text-white text-xs transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-slate-500 hover:text-slate-900 text-xs transition-colors"
                 >
                   {location.is_active ? (
                     <><EyeOff className="w-3.5 h-3.5" /> Disable</>
@@ -139,4 +139,5 @@ export function AdminLocationsClient({ locations: initialLocations }: { location
     </div>
   );
 }
+
 

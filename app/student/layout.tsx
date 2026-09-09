@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardNav } from "@/components/navbar/DashboardNav";
 import { getNotifications } from "@/actions/notifications";
@@ -35,3 +35,4 @@ export default async function StudentLayout({
     </div>
   );
 }
+

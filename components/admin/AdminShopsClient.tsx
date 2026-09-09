@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -100,7 +100,7 @@ export function AdminShopsClient({
   const tabBtn = (active: boolean, label: React.ReactNode) => (
     `px-4 py-2 rounded-lg text-sm font-medium transition-colors border ${
       active
-        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+        ? "bg-blue-600 text-slate-900 border-blue-600 shadow-sm"
         : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
     }`
   );
@@ -112,7 +112,7 @@ export function AdminShopsClient({
         <button onClick={() => setTab("requests")} className={tabBtn(tab === "requests", null)}>
           Shop Requests
           {pendingCount > 0 && (
-            <span className="ml-2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
+            <span className="ml-2 bg-red-500 text-slate-900 text-xs rounded-full px-1.5 py-0.5">
               {pendingCount}
             </span>
           )}
@@ -274,3 +274,4 @@ export function AdminShopsClient({
     </div>
   );
 }
+

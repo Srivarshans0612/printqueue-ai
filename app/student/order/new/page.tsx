@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { NewOrderClientPage } from "@/components/student/NewOrderClientPage";
 import { redirect } from "next/navigation";
 
@@ -35,3 +35,4 @@ export default async function NewOrderPage(props: {
     />
   );
 }
+

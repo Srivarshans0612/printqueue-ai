@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import {
   MapPin,
@@ -137,13 +137,13 @@ export default async function StudentDashboard() {
                             </span>
                             <StatusBadge status={order.status} />
                           </div>
-                          <p className="text-white text-sm font-medium truncate">{order.document_name}</p>
+                          <p className="text-slate-900 text-sm font-medium truncate">{order.document_name}</p>
                           <p className="text-slate-500 text-xs mt-0.5">
                             {order.shop?.name} · {order.shop?.location?.name}
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-white font-semibold text-sm">₹{order.total_amount}</p>
+                          <p className="text-slate-900 font-semibold text-sm">₹{order.total_amount}</p>
                           <p className="text-slate-400 text-xs mt-0.5">
                             {order.document_pages * order.copies} pages
                           </p>
@@ -211,7 +211,7 @@ export default async function StudentDashboard() {
               ) : (
                 unreadNotifications.map((notif) => (
                   <div key={notif.id} className="border-l-2 border-blue-600 pl-3">
-                    <p className="text-white text-xs font-medium">{notif.title}</p>
+                    <p className="text-slate-900 text-xs font-medium">{notif.title}</p>
                     <p className="text-slate-500 text-xs mt-0.5 line-clamp-2">{notif.body}</p>
                     <p className="text-slate-400 text-[10px] mt-1">
                       {formatDistanceToNow(new Date(notif.created_at), { addSuffix: true })}
@@ -233,17 +233,17 @@ export default async function StudentDashboard() {
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 text-xs">Total Orders</span>
-                <span className="text-white text-sm font-semibold">{recentOrders?.length ?? 0}</span>
+                <span className="text-slate-900 text-sm font-semibold">{recentOrders?.length ?? 0}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 text-xs">Completed</span>
-                <span className="text-white text-sm font-semibold">
+                <span className="text-slate-900 text-sm font-semibold">
                   {recentOrders?.filter((o) => o.status === "picked_up").length ?? 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 text-xs">Total Spent</span>
-                <span className="text-white text-sm font-semibold">
+                <span className="text-slate-900 text-sm font-semibold">
                   ₹{recentOrders?.reduce((s, o) => s + o.total_amount, 0) ?? 0}
                 </span>
               </div>
@@ -254,5 +254,6 @@ export default async function StudentDashboard() {
     </div>
   );
 }
+
 
 

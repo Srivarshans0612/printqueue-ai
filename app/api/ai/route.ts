@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+﻿import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
@@ -70,3 +70,4 @@ Keep responses concise (2-3 sentences max). Be friendly and practical. Focus onl
     return Response.json({ response: "I'm having trouble connecting to the AI right now. Please try again." });
   }
 }
+

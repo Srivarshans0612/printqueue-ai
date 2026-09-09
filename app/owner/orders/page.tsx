@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { OwnerOrdersClient } from "@/components/owner/OwnerOrdersClient";
 
@@ -36,3 +36,4 @@ export default async function OwnerOrdersPage() {
     />
   );
 }
+

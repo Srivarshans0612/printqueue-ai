@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -187,7 +187,7 @@ export function NewOrderClientPage({
         {STEP_LIST.map((s, i) => (
           <div key={s.id} className="flex items-center gap-2 flex-shrink-0">
             <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-              i === stepIndex ? "bg-blue-600 text-white shadow-sm" :
+              i === stepIndex ? "bg-blue-600 text-slate-900 shadow-sm" :
               i < stepIndex  ? "bg-emerald-100 text-emerald-700" :
                                "bg-slate-100 text-slate-400"
             }`}>
@@ -544,7 +544,7 @@ export function NewOrderClientPage({
                     paymentMethod === opt.value ? "border-blue-600 bg-blue-50 ring-2 ring-blue-100" : "border-slate-200 hover:border-slate-400"
                   }`}>
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${paymentMethod === opt.value ? "bg-blue-600" : "bg-slate-100"}`}>
-                    <Icon className={`w-5 h-5 ${paymentMethod === opt.value ? "text-white" : "text-slate-500"}`} />
+                    <Icon className={`w-5 h-5 ${paymentMethod === opt.value ? "text-slate-900" : "text-slate-500"}`} />
                   </div>
                   <div>
                     <p className="text-slate-900 font-medium text-sm">{opt.label}</p>
@@ -624,3 +624,4 @@ export function NewOrderClientPage({
     </div>
   );
 }
+

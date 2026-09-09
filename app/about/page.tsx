@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Printer, Brain, Users, Shield, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,7 @@ export default function AboutPage() {
               <Brain className="w-3 h-3 mr-1" />
               About PrintQueue AI
             </Badge>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
               Smart Printing Without <span className="gradient-text">The Queue</span>
             </h1>
             <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -37,13 +37,13 @@ export default function AboutPage() {
           {/* Problem & Solution */}
           <div className="grid md:grid-cols-2 gap-6 mb-16">
             <div className="glass-card p-6 border-red-500/20">
-              <h2 className="text-xl font-bold text-white mb-3">The Problem</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">The Problem</h2>
               <p className="text-slate-500 text-sm leading-relaxed">
                 Students on every campus waste significant time physically visiting printing shops without knowing if the shop is open, how long the queue is, what the cost will be, or when their documents will be ready. This leads to repeated trips, missed deadlines, and unnecessary frustration.
               </p>
             </div>
             <div className="glass-card p-6 border-lime-500/20">
-              <h2 className="text-xl font-bold text-white mb-3">The Solution</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-3">The Solution</h2>
               <p className="text-slate-500 text-sm leading-relaxed">
                 PrintQueue AI provides a complete digital ordering platform. Students select a campus location, get AI-powered shop recommendations, upload documents, configure print settings, place orders, and track them in real-time — all without leaving their seat.
               </p>
@@ -52,7 +52,7 @@ export default function AboutPage() {
 
           {/* Architecture */}
           <div className="glass-card p-8 mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">Architecture</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Architecture</h2>
             <div className="grid sm:grid-cols-3 gap-4 text-center">
               {[
                 { icon: Users, label: "Students / Owners / Admins", color: "text-blue-400" },
@@ -72,12 +72,12 @@ export default function AboutPage() {
 
           {/* Tech Stack */}
           <div className="mb-16">
-            <h2 className="text-2xl font-bold text-white text-center mb-8">Technology Stack</h2>
+            <h2 className="text-2xl font-bold text-slate-900 text-center mb-8">Technology Stack</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {team.map((t) => (
                 <div key={t.role} className="glass-card p-4">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{t.role}</p>
-                  <p className="text-white text-sm font-medium">{t.tech}</p>
+                  <p className="text-slate-900 text-sm font-medium">{t.tech}</p>
                 </div>
               ))}
             </div>
@@ -85,7 +85,7 @@ export default function AboutPage() {
 
           {/* Features list */}
           <div className="glass-card p-8 mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6">Key Features</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Key Features</h2>
             <div className="grid sm:grid-cols-2 gap-3">
               {[
                 "AI-powered shop recommendation with explainable reasoning",
@@ -125,7 +125,7 @@ export default function AboutPage() {
       <footer className="border-t border-slate-200/60 py-8 px-4 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Printer className="w-4 h-4 text-blue-400" />
-          <span className="text-white font-semibold text-sm">
+          <span className="text-slate-900 font-semibold text-sm">
             PrintQueue <span className="text-lime-400">AI</span>
           </span>
         </div>
@@ -134,4 +134,5 @@ export default function AboutPage() {
     </div>
   );
 }
+
 

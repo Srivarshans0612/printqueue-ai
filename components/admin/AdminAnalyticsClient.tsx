@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import {
@@ -94,7 +94,7 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
                   <span className="text-slate-500 text-xs">{s.label}</span>
                   <Icon className={`w-4 h-4 ${s.color}`} />
                 </div>
-                <p className="text-white font-bold text-2xl">{s.value}</p>
+                <p className="text-slate-900 font-bold text-2xl">{s.value}</p>
               </CardContent>
             </Card>
           );
@@ -207,4 +207,5 @@ export function AdminAnalyticsClient({ orders, shops }: { orders: Order[]; shops
     </div>
   );
 }
+
 

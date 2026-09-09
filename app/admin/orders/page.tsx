@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/server";
+﻿import { createAdminClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/components/orders/OrderStatusBadge";
@@ -39,12 +39,12 @@ export default async function AdminOrdersPage() {
                   <tr key={order.id} className="border-b border-slate-200/50 hover:bg-zinc-900/50">
                     <td className="px-4 py-3 token-display font-bold text-blue-400">{order.token}</td>
                     <td className="px-4 py-3">
-                      <p className="text-white text-xs font-medium">{order.student?.full_name}</p>
+                      <p className="text-slate-900 text-xs font-medium">{order.student?.full_name}</p>
                       <p className="text-slate-400 text-[10px]">{order.student?.email}</p>
                     </td>
                     <td className="px-4 py-3 text-slate-600 text-xs">{order.shop?.name}</td>
                     <td className="px-4 py-3 text-slate-500 text-xs">{order.document_pages * order.copies}</td>
-                    <td className="px-4 py-3 text-white font-medium text-xs">₹{order.total_amount}</td>
+                    <td className="px-4 py-3 text-slate-900 font-medium text-xs">₹{order.total_amount}</td>
                     <td className="px-4 py-3"><OrderStatusBadge status={order.status} /></td>
                     <td className="px-4 py-3">
                       <Badge variant={order.payment_status === "paid" ? "success" : "warning"} className="text-[10px]">
@@ -71,5 +71,6 @@ export default async function AdminOrdersPage() {
     </div>
   );
 }
+
 
 

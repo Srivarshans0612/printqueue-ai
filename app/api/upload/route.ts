@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+﻿import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
@@ -53,3 +53,4 @@ export async function POST(request: NextRequest) {
 
   return Response.json({ success: true, path });
 }
+

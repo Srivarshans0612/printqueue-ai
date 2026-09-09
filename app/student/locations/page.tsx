@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { MapPin, Store, ArrowRight, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -40,7 +40,7 @@ export default async function LocationsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 page-enter">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-1">Campus Locations</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-1">Campus Locations</h1>
         <p className="text-slate-500 text-sm">
           Select a campus location to view available printing shops.
         </p>
@@ -72,7 +72,7 @@ export default async function LocationsPage() {
                       <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-500 transition-colors mt-1" />
                     </div>
 
-                    <h2 className="text-xl font-bold text-white mb-1">{location.name}</h2>
+                    <h2 className="text-xl font-bold text-slate-900 mb-1">{location.name}</h2>
                     {location.description && (
                       <p className="text-slate-500 text-sm mb-4">{location.description}</p>
                     )}
@@ -110,5 +110,6 @@ export default async function LocationsPage() {
     </div>
   );
 }
+
 
 

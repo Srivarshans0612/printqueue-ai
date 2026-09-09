@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Printer,
   Clock,
@@ -79,7 +79,7 @@ export default function LandingPage() {
             AI-Powered Campus Printing
           </Badge>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-slate-900 leading-tight mb-6">
             Don&apos;t join<br />
             <span className="gradient-text">the queue.</span>
           </h1>
@@ -105,7 +105,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {stats.map((stat) => (
               <div key={stat.label} className="glass-card px-4 py-4 text-center">
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-2xl font-bold text-slate-900 mb-1">{stat.value}</div>
                 <div className="text-xs text-zinc-400">{stat.label}</div>
               </div>
             ))}
@@ -118,7 +118,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <Badge variant="destructive" className="mb-4">The Problem</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
               Campus printing is broken
             </h2>
             <p className="text-zinc-400 max-w-xl mx-auto">
@@ -147,7 +147,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <Badge variant="blue" className="mb-4">How It Works</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
               Six steps to smarter printing
             </h2>
             <p className="text-zinc-400 max-w-xl mx-auto">
@@ -161,7 +161,7 @@ export default function LandingPage() {
                 <div className="text-3xl font-bold text-blue-600/30 mb-3 group-hover:text-blue-600/50 transition-colors">
                   {step.step}
                 </div>
-                <h3 className="text-white font-semibold mb-2">{step.title}</h3>
+                <h3 className="text-slate-900 font-semibold mb-2">{step.title}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
@@ -178,7 +178,7 @@ export default function LandingPage() {
                 <Brain className="w-3 h-3 mr-1" />
                 AI Smart Match
               </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
                 The right shop, every time
               </h2>
               <p className="text-zinc-400 mb-8 leading-relaxed">
@@ -234,7 +234,7 @@ export default function LandingPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-zinc-800 rounded-lg p-3">
                   <p className="text-xs text-zinc-400 mb-1">Predicted ready</p>
-                  <p className="text-white font-semibold text-sm">12:38 PM</p>
+                  <p className="text-slate-900 font-semibold text-sm">12:38 PM</p>
                 </div>
                 <div className="bg-zinc-800 rounded-lg p-3">
                   <p className="text-xs text-zinc-400 mb-1">AI confidence</p>
@@ -251,7 +251,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <Badge variant="blue" className="mb-4">For Students</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
               Everything you need, nothing you don&apos;t
             </h2>
           </div>
@@ -264,7 +264,7 @@ export default function LandingPage() {
                   <div className="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center mb-4 group-hover:bg-blue-600/20 transition-colors">
                     <Icon className="w-5 h-5 text-blue-400" />
                   </div>
-                  <h3 className="text-white font-semibold mb-2">{f.title}</h3>
+                  <h3 className="text-slate-900 font-semibold mb-2">{f.title}</h3>
                   <p className="text-zinc-400 text-sm leading-relaxed">{f.desc}</p>
                 </div>
               );
@@ -278,7 +278,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <Badge variant="warning" className="mb-4">For Shop Owners</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
               Digital workflow. Better business.
             </h2>
           </div>
@@ -291,7 +291,7 @@ export default function LandingPage() {
                   <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-3 group-hover:bg-amber-500/20 transition-colors">
                     <Icon className="w-4 h-4 text-amber-400" />
                   </div>
-                  <h3 className="text-white font-medium text-sm mb-1.5">{f.title}</h3>
+                  <h3 className="text-slate-900 font-medium text-sm mb-1.5">{f.title}</h3>
                   <p className="text-zinc-400 text-xs leading-relaxed">{f.desc}</p>
                 </div>
               );
@@ -304,7 +304,7 @@ export default function LandingPage() {
       <section className="py-24 px-4 bg-zinc-900/30">
         <div className="max-w-4xl mx-auto text-center">
           <Badge variant="success" className="mb-4">Real-time Tracking</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Watch your order progress live
           </h2>
           <p className="text-zinc-400 mb-12 max-w-xl mx-auto">
@@ -337,7 +337,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <span className={`text-sm font-medium ${
-                    step.done ? "text-emerald-400" : step.active ? "text-slate-900" : "text-zinc-500"
+                    step.done ? "text-emerald-400" : step.active ? "text-slate-900" : "text-slate-500"
                   }`}>
                     {step.label}
                   </span>
@@ -355,7 +355,7 @@ export default function LandingPage() {
       <section className="py-24 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <Badge variant="purple" className="mb-4">Payment</Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Pay your way
           </h2>
           <p className="text-zinc-400 mb-12 max-w-xl mx-auto">
@@ -376,7 +376,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-24 px-4 bg-gradient-to-br from-blue-950/40 via-zinc-950 to-zinc-950">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
             Ready to print smarter?
           </h2>
           <p className="text-zinc-400 mb-8 text-lg">
@@ -401,7 +401,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Printer className="w-4 h-4 text-blue-400" />
-            <span className="text-white font-semibold text-sm">
+            <span className="text-slate-900 font-semibold text-sm">
               PrintQueue <span className="text-lime-400">AI</span>
             </span>
           </div>
@@ -409,13 +409,14 @@ export default function LandingPage() {
             © 2026 PrintQueue AI. Built for the national hackathon.
           </p>
           <div className="flex items-center gap-4 text-xs text-zinc-500">
-            <Link href="/about" className="hover:text-white transition-colors">About</Link>
-            <Link href="/login" className="hover:text-white transition-colors">Login</Link>
-            <Link href="/register" className="hover:text-white transition-colors">Register</Link>
+            <Link href="/about" className="hover:text-slate-900 transition-colors">About</Link>
+            <Link href="/login" className="hover:text-slate-900 transition-colors">Login</Link>
+            <Link href="/register" className="hover:text-slate-900 transition-colors">Register</Link>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
 

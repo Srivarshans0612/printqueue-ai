@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -93,7 +93,7 @@ export function OwnerAnalyticsClient({ orders, shopName }: OwnerAnalyticsClientP
                   <span className="text-slate-500 text-xs">{s.label}</span>
                   <Icon className={`w-4 h-4 ${s.color}`} />
                 </div>
-                <p className="text-white font-bold text-2xl">{s.value}</p>
+                <p className="text-slate-900 font-bold text-2xl">{s.value}</p>
               </CardContent>
             </Card>
           );
@@ -202,4 +202,5 @@ export function OwnerAnalyticsClient({ orders, shopName }: OwnerAnalyticsClientP
     </div>
   );
 }
+
 

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
   const supabase = await createClient();
@@ -30,3 +30,4 @@ export async function PATCH(request: Request) {
 
   return Response.json({ success: true });
 }
+

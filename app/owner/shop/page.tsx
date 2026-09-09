@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ShopProfileClient } from "@/components/owner/ShopProfileClient";
 import { ShopRequestForm } from "@/components/owner/ShopRequestForm";
@@ -39,7 +39,7 @@ export default async function OwnerShopPage() {
         <div className="space-y-6">
           {shops.map((shop) => (
             <div key={shop.id}>
-              <h1 className="text-2xl font-bold text-white mb-4">
+              <h1 className="text-2xl font-bold text-slate-900 mb-4">
                 {shops.length > 1 ? `Shop: ${shop.name}` : "Shop Profile"}
               </h1>
               <ShopProfileClient shop={shop} />
@@ -50,7 +50,7 @@ export default async function OwnerShopPage() {
 
       {/* Always show option to register another shop */}
       <div>
-        <h2 className="text-xl font-bold text-white mb-4">
+        <h2 className="text-xl font-bold text-slate-900 mb-4">
           {shops && shops.length > 0
             ? "Register Another Shop"
             : "Register Your Shop"}
@@ -63,3 +63,4 @@ export default async function OwnerShopPage() {
     </div>
   );
 }
+
