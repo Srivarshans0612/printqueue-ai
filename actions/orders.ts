@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
 import { calculateOrderAmount, processPayment } from "@/lib/payments";
 import { z } from "zod";
 
@@ -182,7 +181,7 @@ export async function createOrder(formData: FormData) {
     is_read: false,
   });
 
-  revalidatePath("/student/orders");
+  // No revalidatePath — realtime and optimistic UI handle both sides
   return { success: true, order_id: order.id, token };
 }
 
@@ -348,7 +347,7 @@ export async function cancelOrder(orderId: string) {
 
   await adminClient.rpc("decrement_queue", { shop_id: order.shop_id });
 
-  revalidatePath("/student/orders");
+  // No revalidatePath — student orders list refreshes via router.refresh() on client
   return { success: true };
 }
 

@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -264,12 +264,14 @@ export function OwnerOrdersClient({
 
   const hasMultipleShops = (shops?.length ?? 0) > 1;
 
-  // ── Real-time subscription — one channel per shop ─────────────────
+  // Stable ref for shopIds — prevents channel flapping on re-renders
+  const shopIdsRef = useRef<string[]>(shopIds && shopIds.length > 0 ? shopIds : [shopId]);
+
+  // ── Real-time subscription — one channel per shop, stable channels ────
   useEffect(() => {
     const supabase = createClient();
-    const allShopIds = shopIds && shopIds.length > 0 ? shopIds : [shopId];
+    const allShopIds = shopIdsRef.current;
 
-    // Create a channel for each shop so all orders arrive in real-time
     const channels = allShopIds.map((sid) =>
       supabase
         .channel(`shop_orders:${sid}`)
@@ -294,7 +296,7 @@ export function OwnerOrdersClient({
     return () => {
       channels.forEach((ch) => supabase.removeChannel(ch));
     };
-  }, [shopId, shopIds]);
+  }, []); // Empty deps — channels are created once on mount using stable ref
 
   const filteredOrders = orders.filter((o) => {
     const shopMatch = filterShopId === "all" || o.shop_id === filterShopId;
