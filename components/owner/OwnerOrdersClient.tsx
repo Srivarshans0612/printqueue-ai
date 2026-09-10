@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatusBadge } from "@/components/orders/OrderStatusBadge";
 import { OrderStatusAnimation } from "@/components/orders/OrderStatusAnimation";
 import { formatDistanceToNow, format } from "date-fns";
+import { updateOrderStatus, verifyOTP } from "@/actions/orders";
 
 type Order = {
   id: string;
@@ -244,6 +245,7 @@ function AddPrinterModal({
 export function OwnerOrdersClient({
   orders: initialOrders,
   shopId,
+  shopIds,
   shops,
 }: OwnerOrdersClientProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
@@ -262,27 +264,37 @@ export function OwnerOrdersClient({
 
   const hasMultipleShops = (shops?.length ?? 0) > 1;
 
-  // ── Real-time subscription ─────────────────────────────────────────
+  // ── Real-time subscription — one channel per shop ─────────────────
   useEffect(() => {
     const supabase = createClient();
-    const channel = supabase
-      .channel(`shop_orders:${shopId}`)
-      .on("postgres_changes",
-        { event: "*", schema: "public", table: "orders", filter: `shop_id=eq.${shopId}` },
-        (payload) => {
-          if (payload.eventType === "INSERT") {
-            setOrders((prev) => [payload.new as Order, ...prev]);
-            toast("🔔 New order received!", { duration: 5000 });
-          } else if (payload.eventType === "UPDATE") {
-            setOrders((prev) =>
-              prev.map((o) => o.id === payload.new.id ? { ...o, ...(payload.new as Order) } : o)
-            );
-          }
-        }
-      ).subscribe();
+    const allShopIds = shopIds && shopIds.length > 0 ? shopIds : [shopId];
 
-    return () => { supabase.removeChannel(channel); };
-  }, [shopId]);
+    // Create a channel for each shop so all orders arrive in real-time
+    const channels = allShopIds.map((sid) =>
+      supabase
+        .channel(`shop_orders:${sid}`)
+        .on("postgres_changes",
+          { event: "*", schema: "public", table: "orders", filter: `shop_id=eq.${sid}` },
+          (payload) => {
+            if (payload.eventType === "INSERT") {
+              setOrders((prev) => [payload.new as Order, ...prev]);
+              toast("🔔 New order received!", { duration: 5000 });
+            } else if (payload.eventType === "UPDATE") {
+              setOrders((prev) =>
+                prev.map((o) =>
+                  o.id === payload.new.id ? { ...o, ...(payload.new as Order) } : o
+                )
+              );
+            }
+          }
+        )
+        .subscribe()
+    );
+
+    return () => {
+      channels.forEach((ch) => supabase.removeChannel(ch));
+    };
+  }, [shopId, shopIds]);
 
   const filteredOrders = orders.filter((o) => {
     const shopMatch = filterShopId === "all" || o.shop_id === filterShopId;
@@ -295,31 +307,35 @@ export function OwnerOrdersClient({
 
   // ── Actions ────────────────────────────────────────────────────────
   const handleAccept = async (orderId: string) => {
-    const { updateOrderStatus } = await import("@/actions/orders");
+    // Optimistic update first — instant UI
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "accepted" } : o));
     const result = await updateOrderStatus(orderId, "accepted");
-    if (result.error) toast.error(result.error);
-    else {
-      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "accepted" } : o));
+    if (result.error) {
+      toast.error(result.error);
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "waiting_for_acceptance" } : o));
+    } else {
       toast.success("Order accepted!");
     }
   };
 
   const handleReject = async (orderId: string) => {
-    const { updateOrderStatus } = await import("@/actions/orders");
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "rejected" } : o));
     const result = await updateOrderStatus(orderId, "rejected");
-    if (result.error) toast.error(result.error);
-    else {
-      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "rejected" } : o));
+    if (result.error) {
+      toast.error(result.error);
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "waiting_for_acceptance" } : o));
+    } else {
       toast("Order rejected", { icon: "❌" });
     }
   };
 
   const handlePreparing = async (orderId: string) => {
-    const { updateOrderStatus } = await import("@/actions/orders");
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "preparing", estimated_ready_at: eta || o.estimated_ready_at } : o));
     const result = await updateOrderStatus(orderId, "preparing", eta || undefined);
-    if (result.error) toast.error(result.error);
-    else {
-      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "preparing", estimated_ready_at: eta || o.estimated_ready_at } : o));
+    if (result.error) {
+      toast.error(result.error);
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "accepted" } : o));
+    } else {
       toast.success("Printing started!");
       setEtaOrderId(null);
       setEta("");
@@ -327,18 +343,18 @@ export function OwnerOrdersClient({
   };
 
   const handleReady = async (orderId: string) => {
-    const { updateOrderStatus } = await import("@/actions/orders");
+    setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "ready" } : o));
     const result = await updateOrderStatus(orderId, "ready");
-    if (result.error) toast.error(result.error);
-    else {
-      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "ready" } : o));
+    if (result.error) {
+      toast.error(result.error);
+      setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "preparing" } : o));
+    } else {
       toast.success("Order marked Ready! Student notified 🎉");
     }
   };
 
   const handleVerifyOTP = async () => {
     if (!verifyOrderId || !otp) return;
-    const { verifyOTP } = await import("@/actions/orders");
     const result = await verifyOTP(verifyOrderId, otp);
     if (result.error) toast.error(result.error);
     else {

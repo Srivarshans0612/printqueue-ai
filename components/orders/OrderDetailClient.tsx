@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { OrderStatusAnimation } from "@/components/orders/OrderStatusAnimation";
+import { cancelOrder } from "@/actions/orders";
 import { format } from "date-fns";
 
 type Order = {
@@ -76,26 +77,40 @@ export function OrderDetailClient({ order: initialOrder, role }: OrderDetailClie
         schema: "public",
         table: "orders",
         filter: `id=eq.${order.id}`,
-      }, (payload) => {
+      }, async (payload) => {
         const updated = payload.new as Partial<Order>;
-        if (updated.status && updated.status !== prevStatus.current) {
+        // Always fetch the full order to get all fields including pickup_otp
+        const { data: freshOrder } = await supabase
+          .from("orders")
+          .select("*, shop:shops(id, name, address, phone, location:locations(name)), payment:payments(*)")
+          .eq("id", order.id)
+          .single();
+
+        if (freshOrder) {
+          const newStatus = freshOrder.status;
+          const didChange = newStatus !== prevStatus.current;
+          if (didChange) {
+            prevStatus.current = newStatus;
+            setIsNewStatus(true);
+            setTimeout(() => setIsNewStatus(false), 4000);
+            // Toast notification
+            const t = STATUS_TOASTS[newStatus];
+            if (t) {
+              if (newStatus === "ready" || newStatus === "picked_up") {
+                toast.success(`${t.emoji} ${t.msg}`, { duration: 6000 });
+              } else if (newStatus === "rejected") {
+                toast.error(`${t.emoji} ${t.msg}`, { duration: 6000 });
+              } else {
+                toast(`${t.emoji} ${t.msg}`, { duration: 5000 });
+              }
+            }
+          }
+          setOrder(freshOrder as Order);
+        } else if (updated.status && updated.status !== prevStatus.current) {
+          // Fallback: use payload data
           prevStatus.current = updated.status;
           setIsNewStatus(true);
           setOrder((prev) => ({ ...prev, ...updated }));
-
-          // Show toast notification
-          const t = STATUS_TOASTS[updated.status];
-          if (t) {
-            if (updated.status === "ready" || updated.status === "picked_up") {
-              toast.success(`${t.emoji} ${t.msg}`, { duration: 6000 });
-            } else if (updated.status === "rejected") {
-              toast.error(`${t.emoji} ${t.msg}`, { duration: 6000 });
-            } else {
-              toast(`${t.emoji} ${t.msg}`, { duration: 5000 });
-            }
-          }
-
-          // Reset animation flag after 4s
           setTimeout(() => setIsNewStatus(false), 4000);
         }
       })
@@ -108,17 +123,20 @@ export function OrderDetailClient({ order: initialOrder, role }: OrderDetailClie
   const handleCancel = async () => {
     setCancelling(true);
     try {
-      const { cancelOrder } = await import("@/actions/orders");
+      // Optimistic update first
+      setOrder((prev) => ({ ...prev, status: "cancelled" }));
+      setIsNewStatus(true);
+      setShowCancelConfirm(false);
+
       const result = await cancelOrder(order.id);
       if (result.error) {
         toast.error(result.error);
+        // Revert on error
+        setOrder((prev) => ({ ...prev, status: "waiting_for_acceptance" }));
       } else {
-        setOrder((prev) => ({ ...prev, status: "cancelled" }));
-        setIsNewStatus(true);
         toast.success("Order cancelled.");
-        setShowCancelConfirm(false);
-        setTimeout(() => setIsNewStatus(false), 4000);
       }
+      setTimeout(() => setIsNewStatus(false), 4000);
     } finally {
       setCancelling(false);
     }

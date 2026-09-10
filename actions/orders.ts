@@ -261,8 +261,7 @@ export async function updateOrderStatus(
     await adminClient.from("orders").update({ status }).eq("id", orderId);
   }
 
-  revalidatePath("/owner/orders");
-  revalidatePath("/student/orders");
+  // No revalidatePath — realtime handles live updates on both sides
   return { success: true };
 }
 
@@ -319,8 +318,7 @@ export async function verifyOTP(orderId: string, otp: string) {
     is_read: false,
   });
 
-  revalidatePath("/owner/orders");
-  revalidatePath("/student/orders");
+  // No revalidatePath — realtime handles live updates on both sides
   return { success: true };
 }
 
